@@ -1,1 +1,1 @@
-panel.plugin("presprog/my-plugin", {})
+panel.plugin("presprog/my-kirby-plugin", {})

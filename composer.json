@@ -1,5 +1,5 @@
 {
-  "name": "presprog/kirby-boilerplate",
+  "name": "presprog/my-kirby-plugin",
   "description": "Describe your plugin here",
   "license": "MIT",
   "type": "kirby-plugin",
@@ -23,5 +23,8 @@
       "getkirby/composer-installer": true
     },
     "optimize-autoloader": true
+  },
+  "extra": {
+    "installer-name": "my-plugin"
   }
 }

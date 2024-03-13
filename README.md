@@ -1,8 +1,5 @@
 # My Kirby plugin readme
 
-[![Latest Stable Version](http://poser.pugx.org/presprog/kirby-seo-plugin/v)](https://packagist.org/packages/presprog/my-kirby-plugin)
-[![License](http://poser.pugx.org/presprog/my-kirby-plugin/license)](https://packagist.org/packages/presprog/my-kirby-plugin)
-[![PHP Version Require](http://poser.pugx.org/presprog/kirby-seo-plugin/require/php)](https://packagist.org/packages/presprog/my-kirby-plugin)
 ----
 
 > [!NOTE]
@@ -23,6 +20,7 @@ composer create-project presprog/kirby-skeleton-plugin my-new-kirby-plugin
 * Update the installer name (or remove entirely)
 3. Set the package name in `index.php`
 4. Set the package name in `panel/index.js`
+5. Add [badges](https://poser.pugx.org/), if you like
 
 ----
 

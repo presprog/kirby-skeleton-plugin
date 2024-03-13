@@ -27,3 +27,7 @@
 /vendor/**/tests/*
 /vendor/**/php4/*
 /vendor/getkirby/composer-installer
+
+# Tools
+/tools/**/vendor
+/.php-cs-fixer.cache

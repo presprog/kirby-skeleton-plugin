@@ -1,20 +1,9 @@
 <?php declare(strict_types=1);
 
 $finder = PhpCsFixer\Finder::create()
-                           ->in([
-                               __DIR__ . '/config',
-                               __DIR__ . '/public',
-                               __DIR__ . '/site',
-                           ])
-    // Exclude plugins managed by Composer
-                           ->exclude([
-        __DIR__ . '/site/plugins/kirby-fingerprint',
-        __DIR__ . '/site/plugins/kirby-flash',
-        __DIR__ . '/site/plugins/kirby-form',
-        __DIR__ . '/site/plugins/kirby-types',
-        __DIR__ . '/site/plugins/meta',
-    ])
-;
+                           ->exclude('panel')
+                           ->exclude('vendor')
+                           ->in(__DIR__);
 
 $config = new PhpCsFixer\Config();
 return $config
@@ -42,6 +31,7 @@ return $config
         'method_chaining_indentation' => true,
         'modernize_types_casting' => true,
         'multiline_comment_opening_closing' => true,
+        'native_function_casing' => true,
         'native_type_declaration_casing' => true,
         'new_with_parentheses' => true,
         'no_blank_lines_after_class_opening' => true,
@@ -65,11 +55,8 @@ return $config
         'single_line_comment_style' => true,
         'single_quote' => true,
         'ternary_to_null_coalescing' => true,
-        'trailing_comma_in_multiline' => ['elements' => ['arguments', 'arrays', 'match', 'parameters']],
-        'type_declaration_spaces' => true,
-        'whitespace_after_comma_in_array' => true,
+        'whitespace_after_comma_in_array' => true
     ])
     ->setRiskyAllowed(true)
     ->setIndent("    ")
-    ->setFinder($finder)
-;
+    ->setFinder($finder);

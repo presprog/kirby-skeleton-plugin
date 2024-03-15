@@ -11,16 +11,14 @@ This is our boilerplate for Kirby plugins. Create a project from this repository
 # Adjust `my-new-kirby-plugin` to whatever you want to name the output folder
 composer create-project presprog/kirby-skeleton-plugin my-new-kirby-plugin
 ```
-1. Update the `README.md`
-* Update the package name in the badges
-* Write a proper readme for your plugin
-2. Update `composer.json`:
+1. Update `composer.json`:
 * Update the package name
-* Update the PSR-4 namespace
-* Update the installer name (or remove entirely)
-3. Set the package name in `index.php`
-4. Set the package name in `panel/index.js`
-5. Add [badges](https://poser.pugx.org/), if you like
+* Update the PSR-4 namespace (or remove entirely)
+*  Update the installer name (or remove entirely)
+2. Set the package name in `index.php`
+3. Set the package name in `panel/index.js`
+4. Add [badges](https://poser.pugx.org/), if you like
+5. Write a proper `README.md` for your plugin
 
 ----
 

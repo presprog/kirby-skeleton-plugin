@@ -20,8 +20,7 @@
   },
   "config": {
     "allow-plugins": {
-      "getkirby/composer-installer": true,
-      "bamarni/composer-bin-plugin": true
+      "getkirby/composer-installer": true
     },
     "optimize-autoloader": true
   },
@@ -35,6 +34,7 @@
     ],
     "csfix": "@php tools/phpcs/vendor/bin/php-cs-fixer fix",
     "psalm": "@php tools/psalm/vendor/bin/psalm",
-    "tests": "@php tools/phpunit/vendor/bin/phpunit"
+    "tests": "@php tools/phpunit/vendor/bin/phpunit",
+    "tools": "@php tools/tools.php"
   }
 }

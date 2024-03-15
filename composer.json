@@ -20,20 +20,21 @@
   },
   "config": {
     "allow-plugins": {
-      "getkirby/composer-installer": true
+      "getkirby/composer-installer": true,
+      "bamarni/composer-bin-plugin": true
     },
     "optimize-autoloader": true
   },
   "extra": {
     "installer-name": "my-plugin"
   },
-    "scripts": {
-        "csfix": "@php tools/phpcs/vendor/bin/php-cs-fixer fix",
-        "tests": "@php tools/phpunit/vendor/bin/phpunit",
-        "psalm": "@php tools/psalm/vendor/bin/psalm",
-        "analyze": [
-            "@tests",
-            "@psalm"
-        ]
-    }
+  "scripts": {
+    "analyze": [
+      "@tests",
+      "@psalm"
+    ],
+    "csfix": "@php tools/phpcs/vendor/bin/php-cs-fixer fix",
+    "psalm": "@php tools/psalm/vendor/bin/psalm",
+    "tests": "@php tools/phpunit/vendor/bin/phpunit"
+  }
 }

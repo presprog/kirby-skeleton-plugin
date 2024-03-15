@@ -28,6 +28,7 @@
     "installer-name": "my-plugin"
   },
     "scripts": {
-        "csfix": "@php tools/phpcs/vendor/bin/php-cs-fixer fix"
+        "csfix": "@php tools/phpcs/vendor/bin/php-cs-fixer fix",
+        "tests": "@php tools/phpunit/vendor/bin/phpunit"
     }
 }

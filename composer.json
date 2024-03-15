@@ -29,6 +29,7 @@
   },
     "scripts": {
         "csfix": "@php tools/phpcs/vendor/bin/php-cs-fixer fix",
-        "tests": "@php tools/phpunit/vendor/bin/phpunit"
+        "tests": "@php tools/phpunit/vendor/bin/phpunit",
+        "psalm": "@php tools/psalm/vendor/bin/psalm"
     }
 }

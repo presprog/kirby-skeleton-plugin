@@ -30,9 +30,11 @@
   "scripts": {
     "analyze": [
       "@tests",
-      "@psalm"
+      "@psalm",
+      "@phpmd"
     ],
     "csfix": "@php tools/phpcs/vendor/bin/php-cs-fixer fix",
+    "phpmd": "@php tools/phpmd/vendor/bin/phpmd",
     "psalm": "@php tools/psalm/vendor/bin/psalm",
     "tests": "@php tools/phpunit/vendor/bin/phpunit",
     "tools": "@php tools/tools.php"

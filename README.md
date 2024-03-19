@@ -1,4 +1,10 @@
+![Kirby Skeleton Plugin](/.github/banner.png)
+
 # My Kirby plugin readme
+
+This is our boilerplate for Kirby plugins. Put a short description of what your plugin does here.
+
+> ⚡ Ready for Kirby 4!
 
 ----
 
@@ -22,11 +28,15 @@ composer create-project presprog/kirby-skeleton-plugin my-new-kirby-plugin
 
 ----
 
-## What does this plugin do?
+## 🚀 How to use
 
 …
 
-## Installation
+## ⚙️ Config
+
+…
+
+## 💻 How to install
 
 Install this plugin via **Composer**:
 
@@ -36,7 +46,11 @@ composer require presprog/my-kirby-plugin
 
 Or **download the ZIP file** from GitHub and unpack it to `site/plugins/my-kirby-plugin`
 
-## License
+## ✅ To do
+
+…
+
+## 📄 License
 
 MIT License Copyright © 2024 Present Progressive
 

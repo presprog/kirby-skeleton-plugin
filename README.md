@@ -34,7 +34,7 @@ Install this plugin via **Composer**:
 composer require presprog/my-kirby-plugin
 ```
 
-Or **download the ZIP file** from Github and unpack it to `site/plugins/my-kirby-plugin`
+Or **download the ZIP file** from GitHub and unpack it to `site/plugins/my-kirby-plugin`
 
 ## License
 
@@ -42,6 +42,6 @@ MIT License Copyright © 2024 Present Progressive
 
 ----
 
-<img src="/logo.svg?raw=true" width="200" height="43">
+<img src="./github/logo.svg?raw=true" width="200" height="43">
 
 Made by [Present Progressive](https://www.presentprogressive.de) for the Kirby community.

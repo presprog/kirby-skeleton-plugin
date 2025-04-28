@@ -56,6 +56,6 @@ MIT License Copyright © 2024 Present Progressive
 
 ----
 
-<img src="./github/logo.svg?raw=true" width="200" height="43">
+<img src=".github/logo.svg?raw=true" width="200" height="43">
 
 Made by [Present Progressive](https://www.presentprogressive.de) for the Kirby community.

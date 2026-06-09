@@ -25,7 +25,8 @@
     "optimize-autoloader": true
   },
   "extra": {
-    "installer-name": "my-plugin"
+    "installer-name": "my-plugin",
+    "kirby-cms-path": false
   },
   "scripts": {
     "analyze": [
@@ -41,5 +42,8 @@
     "tests": "@php tools/phpunit/vendor/bin/phpunit --bootstrap=tests/bootstrap.php",
     "tests:coverage": "XDEBUG_MODE=coverage tools/phpunit/vendor/bin/phpunit --bootstrap=tests/bootstrap.php --coverage-html=tests/coverage",
     "tools": "@php tools/tools.php"
+  },
+  "require-dev": {
+    "getkirby/cms": "^5.4"
   }
 }

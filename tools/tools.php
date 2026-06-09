@@ -15,6 +15,10 @@ foreach (new DirectoryIterator($toolsDir) as $tool) {
     }
 
     chdir($tool->getPathname());
+    echo PHP_EOL . '####' . PHP_EOL . PHP_EOL;
+    echo sprintf("Running \e[0;32mcomposer %s\e[0m in \e[0;35m%s\e[0m", $command, $tool->getFilename());
+    echo PHP_EOL;
+
     exec(sprintf('%s %s %s --ansi', PHP_BINARY, '/usr/local/bin/composer', $command));
     chdir($toolsDir);
 }

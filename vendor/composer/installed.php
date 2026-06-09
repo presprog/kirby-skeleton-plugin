@@ -3,7 +3,7 @@
         'name' => 'presprog/my-kirby-plugin',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => '98d8865cf37c2b29d99b1cfa3fb4e4c075ac5a91',
+        'reference' => '6740ee6bfa1875913092f8a916dba0832ede45dd',
         'type' => 'kirby-plugin',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -22,7 +22,7 @@
         'presprog/my-kirby-plugin' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '98d8865cf37c2b29d99b1cfa3fb4e4c075ac5a91',
+            'reference' => '6740ee6bfa1875913092f8a916dba0832ede45dd',
             'type' => 'kirby-plugin',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

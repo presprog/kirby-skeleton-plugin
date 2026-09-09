@@ -3,14 +3,16 @@
 $toolsDir = __DIR__;
 $command  = $argv[1] ?? null;
 
-if (!in_array($command, ['install', 'update'])) {
+if (!in_array($command, ['install', 'update'], true)) {
     echo "Please choose either \e[0;32minstall\e[0m or \e[0;32mupdate\e[0m" . PHP_EOL;
-    return 1;
+    exit(1);
 }
+
+$composer = getenv('COMPOSER_BINARY') ?: 'composer';
 
 /** @var DirectoryIterator $tool */
 foreach (new DirectoryIterator($toolsDir) as $tool) {
-    if (!$tool->isDir() || $tool->isDot()) {
+    if (!$tool->isDir() || $tool->isDot() || !is_file($tool->getPathname() . '/composer.json')) {
         continue;
     }
 
@@ -19,6 +21,13 @@ foreach (new DirectoryIterator($toolsDir) as $tool) {
     echo sprintf("Running \e[0;32mcomposer %s\e[0m in \e[0;35m%s\e[0m", $command, $tool->getFilename());
     echo PHP_EOL;
 
-    exec(sprintf('%s %s %s --ansi', PHP_BINARY, '/usr/local/bin/composer', $command));
+    passthru(
+        sprintf('%s %s --ansi', escapeshellarg($composer), escapeshellarg($command)),
+        $exitCode
+    );
     chdir($toolsDir);
+
+    if ($exitCode !== 0) {
+        exit($exitCode);
+    }
 }

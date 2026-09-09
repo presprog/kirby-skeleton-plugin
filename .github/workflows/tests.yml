@@ -29,9 +29,6 @@ jobs:
       - name: Install dependencies
         run: composer install --prefer-dist --no-progress
 
-      - name: Install dev tools
-        run: composer run-script tools install
-
       - name: Run quality suite
         if: matrix.php-version == '8.4'
         run: composer run-script analyze

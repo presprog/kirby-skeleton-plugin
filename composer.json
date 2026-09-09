@@ -15,6 +15,9 @@
     "getkirby/cms": "^5.0",
     "php": "^8.4"
   },
+  "require-dev": {
+    "bamarni/composer-bin-plugin": "^1.9"
+  },
   "autoload": {
     "psr-4": {
       "PresProg\\MyPlugin\\": "classes/"
@@ -22,11 +25,17 @@
   },
   "config": {
     "allow-plugins": {
+      "bamarni/composer-bin-plugin": true,
       "getkirby/composer-installer": true
     },
     "optimize-autoloader": true
   },
   "extra": {
+    "bamarni-bin": {
+      "bin-links": false,
+      "forward-command": true,
+      "target-directory": "tools"
+    },
     "installer-name": "my-plugin",
     "kirby-cms-path": false
   },
@@ -43,7 +52,6 @@
     "csfix": "@php tools/phpcs/vendor/bin/php-cs-fixer fix",
     "psalm": "@php tools/psalm/vendor/bin/psalm",
     "tests": "@php tools/phpunit/vendor/bin/phpunit",
-    "tests:coverage": "XDEBUG_MODE=coverage tools/phpunit/vendor/bin/phpunit --coverage-html=tests/coverage",
-    "tools": "@php tools/tools.php"
+    "tests:coverage": "XDEBUG_MODE=coverage tools/phpunit/vendor/bin/phpunit --coverage-html=tests/coverage"
   }
 }

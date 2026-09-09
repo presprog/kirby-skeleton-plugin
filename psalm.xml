@@ -1,11 +1,14 @@
 <?xml version="1.0"?>
 <psalm
+  cacheDirectory=".psalm.cache"
   errorLevel="7"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xmlns="https://getpsalm.org/schema/config"
   xsi:schemaLocation="https://getpsalm.org/schema/config tools/psalm/vendor/vimeo/psalm/config.xsd"
 >
   <projectFiles>
+    <file name="helpers.php" />
+    <file name="index.php" />
     <directory name="classes" />
     <directory name="extensions" />
   </projectFiles>

@@ -4,7 +4,7 @@
 
 This is our boilerplate for Kirby plugins. Put a short description of what your plugin does here.
 
-> ⚡ Ready for Kirby 4!
+> ⚡ Requires Kirby 5 and PHP 8.4 or later.
 
 ----
 

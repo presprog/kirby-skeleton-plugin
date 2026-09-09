@@ -16,6 +16,7 @@
 # Tests
 /tests/coverage
 /.phpunit.cache
+/.psalm.cache
 
 # Tools
 /tools/**/vendor

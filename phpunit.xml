@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/11.0/phpunit.xsd"
+  xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/12.0/phpunit.xsd"
+  bootstrap="tests/bootstrap.php"
   beStrictAboutOutputDuringTests="true"
   cacheDirectory=".phpunit.cache"
   colors="true"
@@ -16,11 +17,13 @@
   failOnNotice="true"
   failOnWarning="true"
   failOnRisky="true"
-  failOnEmptyTestSuite="false"
+  failOnEmptyTestSuite="true"
 >
 
   <source>
     <include>
+      <file>./helpers.php</file>
+      <file>./index.php</file>
       <directory>./classes</directory>
     </include>
   </source>

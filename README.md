@@ -8,25 +8,34 @@ This is our boilerplate for Kirby plugins. Put a short description of what your 
 
 ----
 
+<!-- plugin-init:start -->
 > [!NOTE]
-> Delete this section after you are done.
+> Initialize the plugin after creating the project, either with the command or manually.
 
-This is our boilerplate for Kirby plugins. Create a project from this repository to create a new plugin and adjust the files accordingly:
+Create a project from this repository and initialize it with its Composer package name:
 
 ```bash
-# Adjust `my-new-kirby-plugin` to whatever you want to name the output folder
 composer create-project presprog/kirby-skeleton-plugin my-new-kirby-plugin
+cd my-new-kirby-plugin
+composer plugin:init your-vendor/kirby-your-plugin
 ```
+
+The initializer removes the conventional `kirby-` package prefix from the Kirby plugin ID and derives the remaining values. For example, `your-vendor/kirby-your-plugin` becomes plugin ID `your-vendor/your-plugin` and namespace `YourVendor\YourPlugin`. Use `--namespace=YourVendor\\YourPlugin` to override the inferred namespace.
+
+To initialize the plugin manually instead:
+
 1. Update `composer.json`:
-* Update the package name
-* Update the PSR-4 namespace (or remove entirely)
-*  Update the installer name (or remove entirely)
-2. Set the package name in `index.php`
-3. Set the package name in `panel/index.js`
-4. Add [badges](https://poser.pugx.org/), if you like
-5. Write a proper `README.md` for your plugin
+   - Set the package name and description.
+   - Replace the PSR-4 namespace.
+   - Set the `installer-name`.
+   - Remove the `plugin:init` script.
+2. Replace the plugin ID in `index.php` and `panel/index.js`.
+3. Update the namespace and plugin ID assertions in `tests/PluginTest.php`.
+4. Replace the placeholder title, description and installation details in this README.
+5. Delete `tools/init.php` and this initialization section.
 
 ----
+<!-- plugin-init:end -->
 
 ## 🚀 How to use
 

@@ -31,6 +31,7 @@
     "kirby-cms-path": false
   },
   "scripts": {
+    "plugin:init": "@php tools/init.php",
     "analyze": [
       "@composer-validate",
       "@cscheck",

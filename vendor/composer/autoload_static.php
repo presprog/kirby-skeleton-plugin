@@ -122,6 +122,17 @@ class ComposerStaticInit8e54bd0e593d27f040c77cab1f9b5684
                 0 => __DIR__ . '/..' . '/claviska/simpleimage/src',
             ),
         ),
+        'P' => 
+        array (
+            'ParsedownExtra' => 
+            array (
+                0 => __DIR__ . '/..' . '/erusev/parsedown-extra',
+            ),
+            'Parsedown' => 
+            array (
+                0 => __DIR__ . '/..' . '/erusev/parsedown',
+            ),
+        ),
         'M' => 
         array (
             'Michelf' => 
@@ -290,6 +301,7 @@ class ComposerStaticInit8e54bd0e593d27f040c77cab1f9b5684
         'Kirby\\Content\\VersionRules' => __DIR__ . '/..' . '/getkirby/cms/src/Content/VersionRules.php',
         'Kirby\\Content\\Versions' => __DIR__ . '/..' . '/getkirby/cms/src/Content/Versions.php',
         'Kirby\\Data\\Data' => __DIR__ . '/..' . '/getkirby/cms/src/Data/Data.php',
+        'Kirby\\Data\\Frontmatter' => __DIR__ . '/..' . '/getkirby/cms/src/Data/Frontmatter.php',
         'Kirby\\Data\\Handler' => __DIR__ . '/..' . '/getkirby/cms/src/Data/Handler.php',
         'Kirby\\Data\\Json' => __DIR__ . '/..' . '/getkirby/cms/src/Data/Json.php',
         'Kirby\\Data\\PHP' => __DIR__ . '/..' . '/getkirby/cms/src/Data/PHP.php',
@@ -578,8 +590,8 @@ class ComposerStaticInit8e54bd0e593d27f040c77cab1f9b5684
         'PHPMailer\\PHPMailer\\PHPMailer' => __DIR__ . '/..' . '/phpmailer/phpmailer/src/PHPMailer.php',
         'PHPMailer\\PHPMailer\\POP3' => __DIR__ . '/..' . '/phpmailer/phpmailer/src/POP3.php',
         'PHPMailer\\PHPMailer\\SMTP' => __DIR__ . '/..' . '/phpmailer/phpmailer/src/SMTP.php',
-        'Parsedown' => __DIR__ . '/..' . '/getkirby/cms/dependencies/parsedown/Parsedown.php',
-        'ParsedownExtra' => __DIR__ . '/..' . '/getkirby/cms/dependencies/parsedown-extra/ParsedownExtra.php',
+        'Parsedown' => __DIR__ . '/..' . '/erusev/parsedown/Parsedown.php',
+        'ParsedownExtra' => __DIR__ . '/..' . '/erusev/parsedown-extra/ParsedownExtra.php',
         'Psr\\Log\\AbstractLogger' => __DIR__ . '/..' . '/psr/log/src/AbstractLogger.php',
         'Psr\\Log\\InvalidArgumentException' => __DIR__ . '/..' . '/psr/log/src/InvalidArgumentException.php',
         'Psr\\Log\\LogLevel' => __DIR__ . '/..' . '/psr/log/src/LogLevel.php',

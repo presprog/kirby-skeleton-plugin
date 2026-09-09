@@ -23,6 +23,18 @@ class Html extends Xml
 	public static array|null $entities = null;
 
 	/**
+	 * List of hosts that are allowed as source for embedded
+	 * Gists. Embedding Gists from any other host is blocked to
+	 * prevent loading untrusted scripts. Additional hosts (e.g.
+	 * for GitHub Enterprise) can be allowed via config:
+	 *
+	 * ```php
+	 * Html::$gistDomains[] = 'gist.example.com';
+	 * ```
+	 */
+	public static array $gistDomains = ['gist.github.com'];
+
+	/**
 	 * List of HTML tags that can be used inline
 	 */
 	public static array $inlineList = [
@@ -156,11 +168,22 @@ class Html extends Xml
 			return null;
 		}
 
+		// cache the keys/values arrays;
+		// invalidates if $entities changes
+		static $cached = null;
+		static $html   = [];
+		static $xml    = [];
+
 		// HTML supports named entities
 		$entities = parent::entities();
-		$html     = array_keys($entities);
-		$xml      = array_values($entities);
-		$attr     = str_replace($xml, $html, $attr);
+
+		if ($cached !== $entities) {
+			$html   = array_keys($entities);
+			$xml    = array_values($entities);
+			$cached = $entities;
+		}
+
+		$attr = str_replace($xml, $html, $attr);
 
 		if ($attr) {
 			return $before . $attr . $after;
@@ -212,7 +235,8 @@ class Html extends Xml
 			...$attr
 		];
 
-		// add rel=noopener to target blank links to improve security
+		// add rel=noreferrer to target=_blank links to improve security
+		// (avoids referrer leak and `window.opener` access)
 		$attr['rel'] = static::rel(
 			$attr['rel'] ?? null,
 			$attr['target'] ?? null
@@ -303,6 +327,12 @@ class Html extends Xml
 		string|null $file = null,
 		array $attr = []
 	): string {
+		// only embed Gists from allowed hosts to prevent
+		// loading untrusted scripts from arbitrary URLs
+		if (in_array((new Uri($url))->host(), static::$gistDomains, true) === false) {
+			return '';
+		}
+
 		$src = $url . '.js';
 
 		if ($file !== null) {
@@ -374,7 +404,8 @@ class Html extends Xml
 			$text = Url::short($text);
 		}
 
-		// add rel=noopener to target blank links to improve security
+		// add rel=noreferrer to target=_blank links to improve security
+		// (avoids referrer leak and `window.opener` access)
 		$attr['rel'] = static::rel(
 			$attr['rel'] ?? null,
 			$attr['target'] ?? null
@@ -384,7 +415,9 @@ class Html extends Xml
 	}
 
 	/**
-	 * Add noreferrer to rels when target is `_blank`
+	 * Ensures a safe default `rel` for links with target `_blank`.
+	 * Adds `noreferrer` (which also implies `noopener`) when no
+	 * explicit `rel` is set. Pass an explicit `rel` to opt out.
 	 *
 	 * @param string|null $rel Current `rel` value
 	 * @param string|null $target Current `target` value
@@ -396,12 +429,8 @@ class Html extends Xml
 	): string|null {
 		$rel = trim($rel ?? '');
 
-		if ($target === '_blank') {
-			if (empty($rel) === false) {
-				return $rel;
-			}
-
-			return trim($rel . ' noreferrer', ' ');
+		if ($target === '_blank' && $rel === '') {
+			return 'noreferrer';
 		}
 
 		return $rel ?: null;

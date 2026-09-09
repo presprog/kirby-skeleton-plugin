@@ -420,7 +420,12 @@ class Version
 			throw new LogicException('Invalid model type');
 		}
 
-		return $this->previewTokenFromUrl($this->model->url());
+		// bind the token to the custom preview URL so it still matches
+		// when the version is rendered, otherwise use the page URL
+		$preview = $this->model->blueprint()->preview();
+		$url     = is_string($preview) === true ? $preview : $this->model->url();
+
+		return $this->previewTokenFromUrl($url);
 	}
 
 	/**
@@ -590,6 +595,35 @@ class Version
 		VersionRules::touch($this, $language);
 
 		$this->model->storage()->touch($this->id, $language);
+	}
+
+	/**
+	 * Removes the lock from the changes version without discarding changes
+	 */
+	public function unlock(Language|string $language = 'default'): void
+	{
+		$language = Language::ensure($language);
+
+		if ($this->exists($language) === false) {
+			return;
+		}
+
+		$fields = $this->read($language);
+
+		// only remove the lock if the current user holds it
+		if (($fields['lock'] ?? null) !== $this->model->kirby()->user()?->id()) {
+			return;
+		}
+
+		unset($fields['lock']);
+
+		$this->model->storage()->update(
+			versionId: $this->id,
+			language:  $language,
+			fields:    $fields
+		);
+
+		VersionCache::remove($this, $language);
 	}
 
 	/**

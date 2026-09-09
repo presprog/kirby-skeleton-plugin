@@ -8,6 +8,7 @@
 /node_modules
 
 # Files of Composer dependencies that are not needed for the plugin
+/composer.lock
 /vendor/**/.*
 /vendor/**/*.json
 /vendor/**/*.txt

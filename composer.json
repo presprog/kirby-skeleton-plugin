@@ -13,6 +13,9 @@
   "require": {
     "getkirby/composer-installer": "^1.2"
   },
+  "require-dev": {
+    "getkirby/cms": "^5.0"
+  },
   "autoload": {
     "psr-4": {
       "PresProg\\MyPlugin\\": "classes/"
@@ -42,8 +45,5 @@
     "tests": "@php tools/phpunit/vendor/bin/phpunit --bootstrap=tests/bootstrap.php",
     "tests:coverage": "XDEBUG_MODE=coverage tools/phpunit/vendor/bin/phpunit --bootstrap=tests/bootstrap.php --coverage-html=tests/coverage",
     "tools": "@php tools/tools.php"
-  },
-  "require-dev": {
-    "getkirby/cms": "^5.4"
   }
 }

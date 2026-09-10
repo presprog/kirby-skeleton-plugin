@@ -30,13 +30,23 @@ To initialize the plugin manually instead:
    - Set the `installer-name`.
    - Remove the `plugin:init` script.
 2. Replace the plugin ID in `index.php` and `panel/index.js`.
-3. Update the namespace and plugin ID assertions in `tests/PluginTest.php`.
-4. Replace the placeholder title, description and installation details in this README.
-5. Delete `tools/init.php`, `tests/PluginInitializerTest.php` and this
+3. Install the frontend dependencies with `yarn install --immutable`, run
+   `yarn build` and commit the generated Panel assets.
+4. Update the namespace and plugin ID assertions in `tests/PluginTest.php`.
+5. Replace the placeholder title, description and installation details in this README.
+6. Delete `tools/init.php`, `tests/PluginInitializerTest.php` and this
    initialization section.
 
 ----
 <!-- plugin-init:end -->
+
+## 🛠️ Panel development
+
+Run `yarn dev` while developing the Panel interface and `yarn build` before
+committing changes. The generated root-level `index.js` and, when styles are
+present, `index.css` must be committed so Composer installations are ready to
+run without Node.js or Yarn. CI verifies that these files match the sources in
+`panel/`.
 
 ## 🚀 How to use
 

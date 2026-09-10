@@ -31,6 +31,7 @@ final class PluginInitializerTest extends TestCase
         foreach ([
             'composer.json',
             'helpers.php',
+            'index.js',
             'index.php',
             'README.md',
             'panel/index.js',
@@ -107,6 +108,10 @@ final class PluginInitializerTest extends TestCase
         self::assertStringContainsString(
             'panel.plugin("your-vendor/your-plugin"',
             $this->read('panel/index.js')
+        );
+        self::assertStringContainsString(
+            'panel.plugin("your-vendor/your-plugin"',
+            $this->read('index.js')
         );
         $pluginTest = $this->read('tests/PluginTest.php');
         self::assertStringContainsString(

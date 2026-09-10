@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "kirbyup panel/index.js --watch",
     "serve": "kirbyup serve panel/index.js",
-    "build": "kirbyup panel/index.js"
+    "build": "node tools/clean-panel-assets.mjs && kirbyup panel/index.js"
   },
   "devDependencies": {
     "kirbyup": "3.4.1"

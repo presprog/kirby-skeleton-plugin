@@ -212,6 +212,7 @@ final class PluginInitializer
     {
         $files = [
             $this->root . '/helpers.php',
+            $this->root . '/index.js',
             $this->root . '/index.php',
             $this->root . '/panel/index.js'
         ];
@@ -230,7 +231,7 @@ final class PluginInitializer
 
         sort($files);
 
-        foreach ([$this->root . '/index.php', $this->root . '/panel/index.js'] as $path) {
+        foreach ([$this->root . '/index.js', $this->root . '/index.php', $this->root . '/panel/index.js'] as $path) {
             if (!str_contains($this->read($path), self::DEFAULT_PLUGIN)) {
                 throw new LogicException('Could not find the skeleton plugin ID in ' . $path);
             }

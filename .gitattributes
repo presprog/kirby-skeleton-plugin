@@ -11,6 +11,12 @@ psalm.xml export-ignore
 tools/** export-ignore
 tools/init.php -export-ignore
 
+# Panel build sources
+.yarnrc.yml export-ignore
+package.json export-ignore
+panel/ export-ignore
+yarn.lock export-ignore
+
 # Plugin
 .github export-ignore
 tests export-ignore

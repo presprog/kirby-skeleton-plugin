@@ -25,6 +25,7 @@ final class PluginInitializerTest extends TestCase
             'resources/frontend',
             'resources/panel',
             'scripts',
+            'snippets',
             'tests',
             'tools'
         ] as $directory) {
@@ -35,6 +36,8 @@ final class PluginInitializerTest extends TestCase
 
         foreach ([
             'composer.json',
+            'extensions/hooks.php',
+            'extensions/snippets.php',
             'helpers.php',
             'index.js',
             'index.php',
@@ -47,6 +50,7 @@ final class PluginInitializerTest extends TestCase
             'resources/panel/index.css',
             'resources/panel/index.js',
             'resources/panel/index.test.js',
+            'snippets/example.php',
             'tests/PluginTest.php',
             'scripts/init.php'
         ] as $path) {
@@ -100,6 +104,10 @@ final class PluginInitializerTest extends TestCase
         self::assertStringContainsString(
             "App::plugin('your-vendor/your-plugin'",
             $this->read('index.php')
+        );
+        self::assertStringContainsString(
+            "'your-vendor/your-plugin/example'",
+            $this->read('extensions/snippets.php')
         );
         self::assertStringContainsString(
             'panel.plugin("your-vendor/your-plugin"',

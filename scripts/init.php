@@ -236,7 +236,7 @@ final class PluginInitializer
             }
         }
 
-        foreach (['assets/dist', 'classes', 'extensions', 'resources', 'tests'] as $directory) {
+        foreach (['assets/dist', 'classes', 'extensions', 'resources', 'snippets', 'tests'] as $directory) {
             if (!is_dir($this->root . '/' . $directory)) {
                 continue;
             }

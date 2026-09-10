@@ -43,7 +43,8 @@ To initialize the plugin manually instead:
 
 ## 🛠️ Panel development
 
-Run `yarn dev` while developing the Panel interface and `yarn build` before
+Run `yarn dev` while developing the Panel interface and `yarn test:unit` for
+Panel JavaScript tests. Run `composer assets:check` before
 committing changes. The generated root-level `index.js` and, when styles are
 present, `index.css` must be committed so Composer installations are ready to
 run without Node.js or Yarn. CI verifies that these files match the sources in

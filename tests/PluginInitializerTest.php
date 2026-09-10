@@ -36,6 +36,7 @@ final class PluginInitializerTest extends TestCase
             'index.php',
             'README.md',
             'panel/index.js',
+            'panel/index.test.js',
             'tests/PluginTest.php',
             'scripts/init.php'
         ] as $path) {
@@ -93,6 +94,10 @@ final class PluginInitializerTest extends TestCase
         self::assertStringContainsString(
             'panel.plugin("your-vendor/your-plugin"',
             $this->read('panel/index.js')
+        );
+        self::assertStringContainsString(
+            'panel.plugin).toHaveBeenCalledWith("your-vendor/your-plugin"',
+            $this->read('panel/index.test.js')
         );
         self::assertStringContainsString(
             'panel.plugin("your-vendor/your-plugin"',

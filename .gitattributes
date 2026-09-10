@@ -5,6 +5,8 @@
 # Tools
 .editorconfig export-ignore
 .php-cs-fixer.php export-ignore
+vitest.config.mjs export-ignore
+vitest.setup.js export-ignore
 phpmd.xml export-ignore
 phpunit.xml export-ignore
 psalm.xml export-ignore

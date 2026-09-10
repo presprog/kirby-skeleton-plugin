@@ -227,17 +227,16 @@ final class PluginInitializer
         $files = [
             $this->root . '/helpers.php',
             $this->root . '/index.js',
-            $this->root . '/index.php',
-            $this->root . '/panel/index.js'
+            $this->root . '/index.php'
         ];
 
-        foreach (['classes', 'extensions', 'tests'] as $directory) {
+        foreach (['classes', 'extensions', 'panel', 'tests'] as $directory) {
             $iterator = new RecursiveIteratorIterator(
                 new RecursiveDirectoryIterator($this->root . '/' . $directory, FilesystemIterator::SKIP_DOTS)
             );
 
             foreach ($iterator as $file) {
-                if ($file->isFile() && $file->getExtension() === 'php') {
+                if ($file->isFile() && in_array($file->getExtension(), ['js', 'php', 'ts', 'vue'], true) === true) {
                     $files[] = $file->getPathname();
                 }
             }

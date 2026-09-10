@@ -9,7 +9,10 @@ phpmd.xml export-ignore
 phpunit.xml export-ignore
 psalm.xml export-ignore
 tools/** export-ignore
-tools/init.php -export-ignore
+
+# Scripts
+scripts/** export-ignore
+scripts/init.php -export-ignore
 
 # Panel build sources
 .yarnrc.yml export-ignore

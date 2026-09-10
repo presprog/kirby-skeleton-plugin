@@ -20,6 +20,7 @@ final class PluginInitializerTest extends TestCase
             'classes',
             'extensions',
             'panel',
+            'scripts',
             'tests',
             'tools'
         ] as $directory) {
@@ -36,7 +37,7 @@ final class PluginInitializerTest extends TestCase
             'README.md',
             'panel/index.js',
             'tests/PluginTest.php',
-            'tools/init.php'
+            'scripts/init.php'
         ] as $path) {
             if (!copy(dirname(__DIR__) . '/' . $path, $this->project . '/' . $path)) {
                 throw new RuntimeException('Could not copy fixture file: ' . $path);
@@ -69,7 +70,7 @@ final class PluginInitializerTest extends TestCase
     public function testInitializesCopiedSkeleton(): void
     {
         $process = proc_open(
-            [PHP_BINARY, $this->project . '/tools/init.php', 'your-vendor/kirby-your-plugin'],
+            [PHP_BINARY, $this->project . '/scripts/init.php', 'your-vendor/kirby-your-plugin'],
             [
                 1 => ['pipe', 'w'],
                 2 => ['pipe', 'w']
@@ -128,7 +129,7 @@ final class PluginInitializerTest extends TestCase
         self::assertStringNotContainsString('plugin-init:start', $readme);
 
         self::assertFileExists($this->project . '/vendor/autoload.php');
-        self::assertFileDoesNotExist($this->project . '/tools/init.php');
+        self::assertFileDoesNotExist($this->project . '/scripts/init.php');
         self::assertFileDoesNotExist($this->project . '/tests/PluginInitializerTest.php');
     }
 

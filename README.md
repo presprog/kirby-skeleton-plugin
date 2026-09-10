@@ -34,7 +34,7 @@ To initialize the plugin manually instead:
    `yarn build` and commit the generated Panel assets.
 4. Update the namespace and plugin ID assertions in `tests/PluginTest.php`.
 5. Replace the placeholder title, description and installation details in this README.
-6. Delete `tools/init.php`, `tests/PluginInitializerTest.php` and this
+6. Delete `scripts/init.php`, `tests/PluginInitializerTest.php` and this
    initialization section.
 
 ----

@@ -18,8 +18,6 @@ const run = (command, args, options = {}) => {
   return result
 }
 
-run("corepack", ["yarn", "build"])
-
 const status = spawnSync(
   executable("git"),
   ["status", "--porcelain", "--", "index.js", "index.css"],

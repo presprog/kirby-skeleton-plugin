@@ -8,6 +8,7 @@
     "dev": "kirbyup panel/index.js --watch",
     "serve": "kirbyup serve panel/index.js",
     "build": "node scripts/clean-panel-assets.mjs && kirbyup panel/index.js",
+    "asset:check": "yarn build && node scripts/check-panel-assets.mjs",
     "test:unit": "vitest run --no-isolate"
   },
   "devDependencies": {

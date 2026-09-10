@@ -50,7 +50,6 @@
       "@psalm",
       "@tests"
     ],
-    "assets:check": "node scripts/check-panel-assets.mjs",
     "composer-validate": "composer validate --strict --no-check-version --no-check-all",
     "cscheck": "@php tools/phpcs/vendor/bin/php-cs-fixer check --diff",
     "csfix": "@php tools/phpcs/vendor/bin/php-cs-fixer fix",

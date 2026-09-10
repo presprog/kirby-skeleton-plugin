@@ -17,12 +17,6 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.4'
-          coverage: none
-
       - name: Setup Node.js
         uses: actions/setup-node@v6
         with:
@@ -38,7 +32,7 @@ jobs:
         run: yarn test:unit
 
       - name: Verify compiled Panel assets
-        run: composer assets:check
+        run: yarn asset:check
 
   test:
     name: PHP ${{ matrix.php-version }} / Kirby ${{ matrix.dependencies }}

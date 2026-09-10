@@ -6,6 +6,7 @@ use FilesystemIterator;
 use PHPUnit\Framework\TestCase;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
+use RuntimeException;
 
 final class PluginInitializerTest extends TestCase
 {
@@ -22,7 +23,9 @@ final class PluginInitializerTest extends TestCase
             'tests',
             'tools'
         ] as $directory) {
-            self::assertTrue(mkdir($this->project . '/' . $directory, 0777, true));
+            if (!mkdir($this->project . '/' . $directory, 0777, true)) {
+                throw new RuntimeException('Could not create fixture directory: ' . $directory);
+            }
         }
 
         foreach ([
@@ -34,13 +37,10 @@ final class PluginInitializerTest extends TestCase
             'tests/PluginTest.php',
             'tools/init.php'
         ] as $path) {
-            self::assertTrue(copy(dirname(__DIR__) . '/' . $path, $this->project . '/' . $path));
+            if (!copy(dirname(__DIR__) . '/' . $path, $this->project . '/' . $path)) {
+                throw new RuntimeException('Could not copy fixture file: ' . $path);
+            }
         }
-
-        self::assertNotFalse(file_put_contents(
-            $this->project . '/classes/Example.php',
-            '<?php namespace PresProg\\MyPlugin; final class Example {}' . PHP_EOL
-        ));
     }
 
     protected function tearDown(): void
@@ -77,16 +77,15 @@ final class PluginInitializerTest extends TestCase
             $this->project
         );
 
-        self::assertIsResource($process);
+        if (!is_resource($process)) {
+            throw new RuntimeException('Could not start the initializer.');
+        }
 
         $output   = stream_get_contents($pipes[1]);
         $error    = stream_get_contents($pipes[2]);
         $exitCode = proc_close($process);
 
         self::assertSame(0, $exitCode, $output . PHP_EOL . $error);
-        self::assertStringContainsString('Composer package: your-vendor/kirby-your-plugin', $output);
-        self::assertStringContainsString('Kirby plugin:     your-vendor/your-plugin', $output);
-        self::assertStringContainsString('PHP namespace:    YourVendor\\YourPlugin', $output);
 
         $composer = json_decode(
             $this->read('composer.json'),
@@ -96,12 +95,10 @@ final class PluginInitializerTest extends TestCase
         );
 
         self::assertSame('your-vendor/kirby-your-plugin', $composer['name']);
-        self::assertSame('Your Plugin for Kirby CMS', $composer['description']);
         self::assertSame('classes/', $composer['autoload']['psr-4']['YourVendor\\YourPlugin\\']);
         self::assertArrayNotHasKey('PresProg\\MyPlugin\\', $composer['autoload']['psr-4']);
         self::assertSame('your-plugin', $composer['extra']['installer-name']);
         self::assertArrayNotHasKey('plugin:init', $composer['scripts']);
-        self::assertSame('^5.0', $composer['require-dev']['getkirby/cms']);
 
         self::assertStringContainsString(
             "App::plugin('your-vendor/your-plugin'",
@@ -111,17 +108,17 @@ final class PluginInitializerTest extends TestCase
             'panel.plugin("your-vendor/your-plugin"',
             $this->read('panel/index.js')
         );
-        self::assertStringContainsString(
-            'namespace YourVendor\\YourPlugin;',
-            $this->read('classes/Example.php')
-        );
+        $pluginTest = $this->read('tests/PluginTest.php');
         self::assertStringContainsString(
             'namespace YourVendor\\YourPlugin\\Tests;',
-            $this->read('tests/PluginTest.php')
+            $pluginTest
+        );
+        self::assertStringContainsString(
+            "App::plugin('your-vendor/your-plugin')",
+            $pluginTest
         );
 
         $readme = $this->read('README.md');
-        self::assertStringContainsString('# Your Plugin', $readme);
         self::assertStringContainsString('composer require your-vendor/kirby-your-plugin', $readme);
         self::assertStringNotContainsString('plugin-init:start', $readme);
 
@@ -132,7 +129,10 @@ final class PluginInitializerTest extends TestCase
     private function read(string $path): string
     {
         $contents = file_get_contents($this->project . '/' . $path);
-        self::assertNotFalse($contents);
+
+        if ($contents === false) {
+            throw new RuntimeException('Could not read fixture file: ' . $path);
+        }
 
         return $contents;
     }

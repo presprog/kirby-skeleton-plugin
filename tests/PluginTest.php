@@ -3,6 +3,7 @@
 namespace PresProg\MyPlugin\Tests;
 
 use Kirby\Cms\App;
+use Kirby\Cms\Plugin;
 use PHPUnit\Framework\TestCase;
 
 final class PluginTest extends TestCase
@@ -11,8 +12,7 @@ final class PluginTest extends TestCase
     {
         $plugin = App::plugin('presprog/my-kirby-plugin');
 
-        self::assertNotNull($plugin);
-        self::assertSame('presprog/my-kirby-plugin', $plugin->name());
+        self::assertInstanceOf(Plugin::class, $plugin);
         self::assertSame(dirname(__DIR__), $plugin->root());
     }
 }

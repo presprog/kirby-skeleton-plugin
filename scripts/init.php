@@ -20,9 +20,22 @@ final class PluginInitializer
             return 0;
         }
 
-        [$package, $namespace] = $this->parseArguments($arguments);
-        $identity              = $this->identity($package, $namespace);
-        $files                 = $this->prepareFiles($identity);
+        try {
+            [$package, $namespace, $dryRun] = $this->parseArguments($arguments);
+        } catch (InvalidArgumentException $exception) {
+            $this->usage(STDERR);
+            fwrite(STDERR, PHP_EOL . 'Error: ' . $exception->getMessage() . PHP_EOL);
+            return 1;
+        }
+
+        $identity = $this->identity($package, $namespace);
+
+        if ($dryRun === true) {
+            $this->success($identity, true);
+            return 0;
+        }
+
+        $files = $this->prepareFiles($identity);
 
         $originals = $this->writeFiles($files);
 
@@ -46,26 +59,27 @@ final class PluginInitializer
             }
         }
 
-        echo PHP_EOL;
-        echo 'Plugin initialized:' . PHP_EOL;
-        echo '  Composer package: ' . $identity['package'] . PHP_EOL;
-        echo '  Kirby plugin:     ' . $identity['plugin'] . PHP_EOL;
-        echo '  PHP namespace:    ' . $identity['namespace'] . PHP_EOL;
-        echo '  Plugin directory: ' . $identity['slug'] . PHP_EOL;
+        $this->success($identity);
 
         return 0;
     }
 
     /**
      * @param list<string> $arguments
-     * @return array{string, string|null}
+     * @return array{string, string|null, bool}
      */
     private function parseArguments(array $arguments): array
     {
         $package   = null;
         $namespace = null;
+        $dryRun    = false;
 
         foreach ($arguments as $argument) {
+            if ($argument === '--dry-run') {
+                $dryRun = true;
+                continue;
+            }
+
             if (str_starts_with($argument, '--namespace=')) {
                 $namespace = substr($argument, strlen('--namespace='));
                 continue;
@@ -97,7 +111,7 @@ final class PluginInitializer
             throw new InvalidArgumentException('The namespace is not a valid PHP namespace.');
         }
 
-        return [$package, $namespace];
+        return [$package, $namespace, $dryRun];
     }
 
     /**
@@ -320,7 +334,40 @@ final class PluginInitializer
      */
     private function usage($stream): void
     {
-        fwrite($stream, 'Usage: composer plugin:init vendor/kirby-plugin-name [--namespace=Vendor\\PluginName]' . PHP_EOL);
+        fwrite(
+            $stream,
+            <<<'TXT'
+Usage:
+  composer plugin:init vendor/kirby-plugin-name [options]
+
+Options:
+  --namespace=Vendor\PluginName  Override the inferred PHP namespace.
+  --dry-run                      Show derived values without changing files.
+  -h, --help                     Show this help.
+
+Examples:
+  composer plugin:init your-vendor/kirby-your-plugin
+  composer plugin:init your-vendor/kirby-your-plugin --namespace=YourVendor\YourPlugin
+
+TXT
+        );
+    }
+
+    /**
+     * @param array{package: string, plugin: string, slug: string, namespace: string, title: string, description: string} $identity
+     */
+    private function success(array $identity, bool $dryRun = false): void
+    {
+        echo PHP_EOL;
+        echo ($dryRun ? 'Plugin initialization preview:' : 'Plugin initialized:') . PHP_EOL;
+        echo '  Composer package: ' . $identity['package'] . PHP_EOL;
+        echo '  Kirby plugin:     ' . $identity['plugin'] . PHP_EOL;
+        echo '  PHP namespace:    ' . $identity['namespace'] . PHP_EOL;
+        echo '  Plugin directory: ' . $identity['slug'] . PHP_EOL;
+
+        if ($dryRun === true) {
+            echo PHP_EOL . 'No files changed.' . PHP_EOL;
+        }
     }
 }
 

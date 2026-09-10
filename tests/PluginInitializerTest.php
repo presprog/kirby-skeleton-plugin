@@ -69,23 +69,7 @@ final class PluginInitializerTest extends TestCase
 
     public function testInitializesCopiedSkeleton(): void
     {
-        $process = proc_open(
-            [PHP_BINARY, $this->project . '/scripts/init.php', 'your-vendor/kirby-your-plugin'],
-            [
-                1 => ['pipe', 'w'],
-                2 => ['pipe', 'w']
-            ],
-            $pipes,
-            $this->project
-        );
-
-        if (!is_resource($process)) {
-            throw new RuntimeException('Could not start the initializer.');
-        }
-
-        $output   = stream_get_contents($pipes[1]);
-        $error    = stream_get_contents($pipes[2]);
-        $exitCode = proc_close($process);
+        [$exitCode, $output, $error] = $this->runInitializer('your-vendor/kirby-your-plugin');
 
         self::assertSame(0, $exitCode, $output . PHP_EOL . $error);
 
@@ -133,6 +117,23 @@ final class PluginInitializerTest extends TestCase
         self::assertFileDoesNotExist($this->project . '/tests/PluginInitializerTest.php');
     }
 
+    public function testPreviewsInitializationWithoutChangingFiles(): void
+    {
+        $composerBefore = $this->read('composer.json');
+
+        [$exitCode, $output, $error] = $this->runInitializer(
+            'your-vendor/kirby-your-plugin',
+            '--dry-run'
+        );
+
+        self::assertSame(0, $exitCode, $output . PHP_EOL . $error);
+        self::assertStringContainsString('Plugin initialization preview:', $output);
+        self::assertStringContainsString('Kirby plugin:     your-vendor/your-plugin', $output);
+        self::assertStringContainsString('No files changed.', $output);
+        self::assertSame($composerBefore, $this->read('composer.json'));
+        self::assertFileExists($this->project . '/scripts/init.php');
+    }
+
     private function read(string $path): string
     {
         $contents = file_get_contents($this->project . '/' . $path);
@@ -142,5 +143,31 @@ final class PluginInitializerTest extends TestCase
         }
 
         return $contents;
+    }
+
+    /**
+     * @return array{int, string, string}
+     */
+    private function runInitializer(string ...$arguments): array
+    {
+        $process = proc_open(
+            [PHP_BINARY, $this->project . '/scripts/init.php', ...$arguments],
+            [
+                1 => ['pipe', 'w'],
+                2 => ['pipe', 'w']
+            ],
+            $pipes,
+            $this->project
+        );
+
+        if (!is_resource($process)) {
+            throw new RuntimeException('Could not start the initializer.');
+        }
+
+        $output   = stream_get_contents($pipes[1]);
+        $error    = stream_get_contents($pipes[2]);
+        $exitCode = proc_close($process);
+
+        return [$exitCode, $output, $error];
     }
 }

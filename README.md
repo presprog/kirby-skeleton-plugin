@@ -21,6 +21,7 @@ composer plugin:init your-vendor/kirby-your-plugin
 ```
 
 The initializer removes the conventional `kirby-` package prefix from the Kirby plugin ID and derives the remaining values. For example, `your-vendor/kirby-your-plugin` becomes plugin ID `your-vendor/your-plugin` and namespace `YourVendor\YourPlugin`. Use `--namespace=YourVendor\\YourPlugin` to override the inferred namespace.
+Use `--dry-run` to preview the derived values without changing files.
 
 To initialize the plugin manually instead:
 

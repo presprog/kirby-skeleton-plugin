@@ -11,11 +11,21 @@ permissions:
 
 jobs:
   test:
+    name: PHP ${{ matrix.php-version }} / Kirby ${{ matrix.dependencies }}
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        php-version: ['8.4', '8.5']
+        include:
+          - php-version: '8.4'
+            dependencies: lowest
+            suite: tests
+          - php-version: '8.4'
+            dependencies: latest
+            suite: analyze
+          - php-version: '8.5'
+            dependencies: latest
+            suite: tests
 
     steps:
       - uses: actions/checkout@v6
@@ -26,13 +36,17 @@ jobs:
           php-version: ${{ matrix.php-version }}
           coverage: none
 
-      - name: Install dependencies
+      - name: Install latest dependencies
+        if: matrix.dependencies == 'latest'
         run: composer install --prefer-dist --no-progress
 
-      - name: Run quality suite
-        if: matrix.php-version == '8.4'
-        run: composer run-script analyze
+      - name: Install lowest dependencies
+        if: matrix.dependencies == 'lowest'
+        run: composer update --prefer-lowest --prefer-stable --prefer-dist --no-progress --no-plugins
 
-      - name: Run test suite
-        if: matrix.php-version != '8.4'
-        run: composer run-script tests
+      - name: Install tools for lowest dependencies
+        if: matrix.dependencies == 'lowest'
+        run: composer bin all install --prefer-dist --no-progress
+
+      - name: Run ${{ matrix.suite }} suite
+        run: composer run-script ${{ matrix.suite }}

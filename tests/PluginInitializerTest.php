@@ -124,6 +124,7 @@ final class PluginInitializerTest extends TestCase
 
         self::assertFileExists($this->project . '/vendor/autoload.php');
         self::assertFileDoesNotExist($this->project . '/tools/init.php');
+        self::assertFileDoesNotExist($this->project . '/tests/PluginInitializerTest.php');
     }
 
     private function read(string $path): string

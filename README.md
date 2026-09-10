@@ -32,7 +32,8 @@ To initialize the plugin manually instead:
 2. Replace the plugin ID in `index.php` and `panel/index.js`.
 3. Update the namespace and plugin ID assertions in `tests/PluginTest.php`.
 4. Replace the placeholder title, description and installation details in this README.
-5. Delete `tools/init.php` and this initialization section.
+5. Delete `tools/init.php`, `tests/PluginInitializerTest.php` and this
+   initialization section.
 
 ----
 <!-- plugin-init:end -->

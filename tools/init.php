@@ -40,8 +40,10 @@ final class PluginInitializer
             throw $exception;
         }
 
-        if (!unlink(__FILE__)) {
-            fwrite(STDERR, 'Warning: Could not remove ' . basename(__FILE__) . PHP_EOL);
+        foreach ([__FILE__, $this->root . '/tests/PluginInitializerTest.php'] as $path) {
+            if (is_file($path) && !unlink($path)) {
+                fwrite(STDERR, 'Warning: Could not remove ' . basename($path) . PHP_EOL);
+            }
         }
 
         echo PHP_EOL;

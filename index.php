@@ -4,6 +4,10 @@
 @include_once __DIR__ . '/helpers.php';
 
 \Kirby\Cms\App::plugin('presprog/my-kirby-plugin', [
-    'hooks'    => require __DIR__ . '/extensions/hooks.php',
-    'snippets' => require __DIR__ . '/extensions/snippets.php'
+    'fileMethods'  => require __DIR__ . '/methods/file.php',
+    'hooks'        => require __DIR__ . '/extensions/hooks.php',
+    'pageMethods'  => require __DIR__ . '/methods/page.php',
+    'pagesMethods' => require __DIR__ . '/methods/pages.php',
+    'siteMethods'  => require __DIR__ . '/methods/site.php',
+    'snippets'     => require __DIR__ . '/extensions/snippets.php'
 ]);

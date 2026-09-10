@@ -36,6 +36,7 @@ final class PluginInitializerTest extends TestCase
 
         foreach ([
             'composer.json',
+            'classes/MyPlugin.php',
             'extensions/hooks.php',
             'extensions/snippets.php',
             'helpers.php',
@@ -100,6 +101,9 @@ final class PluginInitializerTest extends TestCase
         self::assertArrayNotHasKey('PresProg\\MyPlugin\\', $composer['autoload']['psr-4']);
         self::assertSame('your-plugin', $composer['extra']['installer-name']);
         self::assertArrayNotHasKey('plugin:init', $composer['scripts']);
+        self::assertFileExists($this->project . '/classes/YourPlugin.php');
+        self::assertFileDoesNotExist($this->project . '/classes/MyPlugin.php');
+        self::assertStringContainsString('final class YourPlugin', $this->read('classes/YourPlugin.php'));
 
         self::assertStringContainsString(
             "App::plugin('your-vendor/your-plugin'",
@@ -160,9 +164,11 @@ final class PluginInitializerTest extends TestCase
         self::assertSame(0, $exitCode, $output . PHP_EOL . $error);
         self::assertStringContainsString('Plugin initialization preview:', $output);
         self::assertStringContainsString('Kirby plugin:     your-vendor/your-plugin', $output);
+        self::assertStringContainsString('PHP class:        YourVendor\\YourPlugin\\YourPlugin', $output);
         self::assertStringContainsString('No files changed.', $output);
         self::assertSame($composerBefore, $this->read('composer.json'));
         self::assertFileExists($this->project . '/scripts/init.php');
+        self::assertFileExists($this->project . '/classes/MyPlugin.php');
     }
 
     private function read(string $path): string

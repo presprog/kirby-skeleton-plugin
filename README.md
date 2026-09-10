@@ -30,13 +30,14 @@ To initialize the plugin manually instead:
    - Replace the PSR-4 namespace.
    - Set the `installer-name`.
    - Remove the `plugin:init` script.
-2. Replace the plugin ID in `index.php`, `resources/panel/index.js` and
+2. Rename `classes/MyPlugin.php` and the `MyPlugin` class.
+3. Replace the plugin ID in `index.php`, `resources/panel/index.js` and
    `resources/frontend/index.js`.
-3. Install the frontend dependencies with `yarn install --immutable`, run
+4. Install the frontend dependencies with `yarn install --immutable`, run
    `yarn build` and commit the generated assets.
-4. Update the namespace and plugin ID assertions in `tests/PluginTest.php`.
-5. Replace the placeholder title, description and installation details in this README.
-6. Delete `scripts/init.php`, `tests/PluginInitializerTest.php` and this
+5. Update the namespace and plugin ID assertions in `tests/PluginTest.php`.
+6. Replace the placeholder title, description and installation details in this README.
+7. Delete `scripts/init.php`, `tests/PluginInitializerTest.php` and this
    initialization section.
 
 ----

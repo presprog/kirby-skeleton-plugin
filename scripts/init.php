@@ -2,6 +2,7 @@
 
 final class PluginInitializer
 {
+    private const DEFAULT_CLASS     = 'MyPlugin';
     private const DEFAULT_NAMESPACE = 'PresProg\\MyPlugin';
     private const DEFAULT_PACKAGE   = 'presprog/my-kirby-plugin';
     private const DEFAULT_PLUGIN    = 'presprog/my-kirby-plugin';
@@ -38,10 +39,16 @@ final class PluginInitializer
         $files = $this->prepareFiles($identity);
 
         $originals = $this->writeFiles($files);
+        $classMove = null;
 
         try {
+            $classMove = $this->renameClassFile($identity['class']);
             $this->dumpAutoload();
         } catch (Throwable $exception) {
+            if ($classMove !== null && is_file($classMove['to'])) {
+                unlink($classMove['to']);
+            }
+
             $this->restoreFiles($originals);
 
             try {
@@ -115,7 +122,7 @@ final class PluginInitializer
     }
 
     /**
-     * @return array{package: string, plugin: string, slug: string, namespace: string, title: string, description: string}
+     * @return array{package: string, plugin: string, slug: string, namespace: string, class: string, title: string, description: string}
      */
     private function identity(string $package, ?string $namespace): array
     {
@@ -136,6 +143,7 @@ final class PluginInitializer
             'plugin'      => $vendor . '/' . $slug,
             'slug'        => $slug,
             'namespace'   => $namespace ?? $this->pascalCase($vendor) . '\\' . $this->pascalCase($slug),
+            'class'       => $this->pascalCase($slug),
             'title'       => $title,
             'description' => $title . ' for Kirby CMS'
         ];
@@ -150,7 +158,7 @@ final class PluginInitializer
     }
 
     /**
-     * @param array{package: string, plugin: string, slug: string, namespace: string, title: string, description: string} $identity
+     * @param array{package: string, plugin: string, slug: string, namespace: string, class: string, title: string, description: string} $identity
      * @return array<string, string>
      */
     private function prepareFiles(array $identity): array
@@ -179,9 +187,14 @@ final class PluginInitializer
         ];
 
         foreach ($this->sourceFiles() as $path) {
-            $contents     = $this->read($path);
-            $contents     = str_replace(self::DEFAULT_NAMESPACE, $identity['namespace'], $contents);
-            $contents     = str_replace(self::DEFAULT_PLUGIN, $identity['plugin'], $contents);
+            $contents = $this->read($path);
+            $contents = str_replace(self::DEFAULT_NAMESPACE, $identity['namespace'], $contents);
+            $contents = str_replace(self::DEFAULT_PLUGIN, $identity['plugin'], $contents);
+            $contents = str_replace(
+                'final class ' . self::DEFAULT_CLASS,
+                'final class ' . $identity['class'],
+                $contents
+            );
             $files[$path] = $contents;
         }
 
@@ -189,7 +202,7 @@ final class PluginInitializer
     }
 
     /**
-     * @param array{package: string, plugin: string, slug: string, namespace: string, title: string, description: string} $identity
+     * @param array{package: string, plugin: string, slug: string, namespace: string, class: string, title: string, description: string} $identity
      */
     private function prepareReadme(array $identity): string
     {
@@ -217,6 +230,32 @@ final class PluginInitializer
         }
 
         return $readme;
+    }
+
+    /**
+     * @return array{from: string, to: string}|null
+     */
+    private function renameClassFile(string $class): array|null
+    {
+        $from = $this->root . '/classes/' . self::DEFAULT_CLASS . '.php';
+        $to   = $this->root . '/classes/' . $class . '.php';
+
+        if ($from === $to || is_file($from) === false) {
+            return null;
+        }
+
+        if (is_file($to) === true) {
+            throw new LogicException('Could not rename the plugin class because ' . $to . ' already exists.');
+        }
+
+        if (rename($from, $to) === false) {
+            throw new RuntimeException('Could not rename the plugin class to ' . basename($to) . '.');
+        }
+
+        return [
+            'from' => $from,
+            'to'   => $to
+        ];
     }
 
     /**
@@ -255,17 +294,18 @@ final class PluginInitializer
         sort($files);
 
         foreach ([
-            $this->root . '/index.js',
-            $this->root . '/index.php',
-            $this->root . '/resources/frontend/index.js',
-            $this->root . '/resources/panel/index.js'
-        ] as $path) {
+            $this->root . '/index.js'                                => self::DEFAULT_PLUGIN,
+            $this->root . '/index.php'                               => self::DEFAULT_PLUGIN,
+            $this->root . '/classes/' . self::DEFAULT_CLASS . '.php' => 'final class ' . self::DEFAULT_CLASS,
+            $this->root . '/resources/frontend/index.js'             => self::DEFAULT_PLUGIN,
+            $this->root . '/resources/panel/index.js'                => self::DEFAULT_PLUGIN
+        ] as $path => $needle) {
             if (!is_file($path)) {
                 continue;
             }
 
-            if (!str_contains($this->read($path), self::DEFAULT_PLUGIN)) {
-                throw new LogicException('Could not find the skeleton plugin ID in ' . $path);
+            if (!str_contains($this->read($path), $needle)) {
+                throw new LogicException('Could not find the skeleton placeholder in ' . $path);
             }
         }
 
@@ -372,7 +412,7 @@ TXT
     }
 
     /**
-     * @param array{package: string, plugin: string, slug: string, namespace: string, title: string, description: string} $identity
+     * @param array{package: string, plugin: string, slug: string, namespace: string, class: string, title: string, description: string} $identity
      */
     private function success(array $identity, bool $dryRun = false): void
     {
@@ -381,6 +421,7 @@ TXT
         echo '  Composer package: ' . $identity['package'] . PHP_EOL;
         echo '  Kirby plugin:     ' . $identity['plugin'] . PHP_EOL;
         echo '  PHP namespace:    ' . $identity['namespace'] . PHP_EOL;
+        echo '  PHP class:        ' . $identity['namespace'] . '\\' . $identity['class'] . PHP_EOL;
         echo '  Plugin directory: ' . $identity['slug'] . PHP_EOL;
 
         if ($dryRun === true) {

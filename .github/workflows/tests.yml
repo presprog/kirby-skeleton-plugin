@@ -28,20 +28,8 @@ jobs:
       - name: Install dependencies
         run: yarn install --immutable
 
-      - name: Build Panel assets
-        run: yarn build
-
       - name: Verify compiled Panel assets
-        shell: bash
-        run: |
-          changes="$(git status --porcelain -- index.js index.css)"
-
-          if [[ -n "$changes" ]]; then
-            echo "$changes"
-            git diff -- index.js index.css
-            echo "Run 'yarn build' and commit the compiled Panel assets." >&2
-            exit 1
-          fi
+        run: composer assets:check
 
   test:
     name: PHP ${{ matrix.php-version }} / Kirby ${{ matrix.dependencies }}

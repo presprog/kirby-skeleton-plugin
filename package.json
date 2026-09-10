@@ -1,7 +1,23 @@
 {
+  "private": true,
+  "packageManager": "yarn@4.18.0",
+  "engines": {
+    "node": ">=18"
+  },
   "scripts": {
-    "dev": "npx -y kirbyup panel/index.js --watch",
-    "serve": "npx -y kirbyup serve panel/index.js",
-    "build": "npx -y kirbyup panel/index.js"
+    "dev": "kirbyup panel/index.js --watch",
+    "serve": "kirbyup serve panel/index.js",
+    "build": "kirbyup panel/index.js"
+  },
+  "devDependencies": {
+    "kirbyup": "3.4.1"
+  },
+  "dependenciesMeta": {
+    "@parcel/watcher": {
+      "built": true
+    },
+    "esbuild": {
+      "built": true
+    }
   }
 }

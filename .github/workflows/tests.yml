@@ -10,6 +10,27 @@ permissions:
   contents: read
 
 jobs:
+  panel:
+    name: Panel build
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Install dependencies
+        run: yarn install --immutable
+
+      - name: Build Panel assets
+        run: yarn build
+
   test:
     name: PHP ${{ matrix.php-version }} / Kirby ${{ matrix.dependencies }}
     runs-on: ubuntu-latest

@@ -17,9 +17,13 @@ final class PluginInitializerTest extends TestCase
         $this->project = sys_get_temp_dir() . '/kirby-plugin-init-' . bin2hex(random_bytes(8));
 
         foreach ([
+            'assets',
+            'assets/dist',
             'classes',
             'extensions',
-            'panel',
+            'resources',
+            'resources/frontend',
+            'resources/panel',
             'scripts',
             'tests',
             'tools'
@@ -35,8 +39,14 @@ final class PluginInitializerTest extends TestCase
             'index.js',
             'index.php',
             'README.md',
-            'panel/index.js',
-            'panel/index.test.js',
+            'assets/dist/frontend.css',
+            'assets/dist/frontend.js',
+            'resources/frontend/index.css',
+            'resources/frontend/index.js',
+            'resources/frontend/index.test.js',
+            'resources/panel/index.css',
+            'resources/panel/index.js',
+            'resources/panel/index.test.js',
             'tests/PluginTest.php',
             'scripts/init.php'
         ] as $path) {
@@ -93,15 +103,23 @@ final class PluginInitializerTest extends TestCase
         );
         self::assertStringContainsString(
             'panel.plugin("your-vendor/your-plugin"',
-            $this->read('panel/index.js')
+            $this->read('resources/panel/index.js')
         );
         self::assertStringContainsString(
             'panel.plugin).toHaveBeenCalledWith("your-vendor/your-plugin"',
-            $this->read('panel/index.test.js')
+            $this->read('resources/panel/index.test.js')
         );
         self::assertStringContainsString(
             'panel.plugin("your-vendor/your-plugin"',
             $this->read('index.js')
+        );
+        self::assertStringContainsString(
+            'your-vendor/your-plugin',
+            $this->read('resources/frontend/index.js')
+        );
+        self::assertStringContainsString(
+            'your-vendor/your-plugin',
+            $this->read('assets/dist/frontend.js')
         );
         $pluginTest = $this->read('tests/PluginTest.php');
         self::assertStringContainsString(

@@ -5,15 +5,19 @@
     "node": "^20.0.0 || ^22.0.0 || >=24.0.0"
   },
   "scripts": {
-    "dev": "kirbyup panel/index.js --watch",
-    "serve": "kirbyup serve panel/index.js",
-    "build": "node scripts/clean-panel-assets.mjs && kirbyup panel/index.js",
-    "asset:check": "yarn build && node scripts/check-panel-assets.mjs",
+    "dev": "yarn dev:panel",
+    "dev:panel": "kirbyup serve resources/panel/index.js --out-dir .",
+    "dev:frontend": "vite build --watch --config vite.frontend.config.mjs",
+    "build": "node scripts/clean-assets.mjs && yarn build:panel && yarn build:frontend",
+    "build:panel": "kirbyup resources/panel/index.js --out-dir .",
+    "build:frontend": "vite build --config vite.frontend.config.mjs",
+    "asset:check": "yarn build && node scripts/check-assets.mjs",
     "test:unit": "vitest run --no-isolate"
   },
   "devDependencies": {
     "happy-dom": "^17.6.3",
     "kirbyup": "3.4.1",
+    "vite": "^7.3.6",
     "vitest": "^4.1.10"
   },
   "dependenciesMeta": {

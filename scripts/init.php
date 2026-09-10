@@ -224,19 +224,29 @@ final class PluginInitializer
      */
     private function sourceFiles(): array
     {
-        $files = [
+        $files = [];
+
+        foreach ([
             $this->root . '/helpers.php',
             $this->root . '/index.js',
             $this->root . '/index.php'
-        ];
+        ] as $path) {
+            if (is_file($path)) {
+                $files[] = $path;
+            }
+        }
 
-        foreach (['classes', 'extensions', 'panel', 'tests'] as $directory) {
+        foreach (['assets/dist', 'classes', 'extensions', 'resources', 'tests'] as $directory) {
+            if (!is_dir($this->root . '/' . $directory)) {
+                continue;
+            }
+
             $iterator = new RecursiveIteratorIterator(
                 new RecursiveDirectoryIterator($this->root . '/' . $directory, FilesystemIterator::SKIP_DOTS)
             );
 
             foreach ($iterator as $file) {
-                if ($file->isFile() && in_array($file->getExtension(), ['js', 'php', 'ts', 'vue'], true) === true) {
+                if ($file->isFile() && in_array($file->getExtension(), ['css', 'js', 'php', 'ts', 'vue'], true) === true) {
                     $files[] = $file->getPathname();
                 }
             }
@@ -244,7 +254,16 @@ final class PluginInitializer
 
         sort($files);
 
-        foreach ([$this->root . '/index.js', $this->root . '/index.php', $this->root . '/panel/index.js'] as $path) {
+        foreach ([
+            $this->root . '/index.js',
+            $this->root . '/index.php',
+            $this->root . '/resources/frontend/index.js',
+            $this->root . '/resources/panel/index.js'
+        ] as $path) {
+            if (!is_file($path)) {
+                continue;
+            }
+
             if (!str_contains($this->read($path), self::DEFAULT_PLUGIN)) {
                 throw new LogicException('Could not find the skeleton plugin ID in ' . $path);
             }

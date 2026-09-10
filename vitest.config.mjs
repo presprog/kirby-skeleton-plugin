@@ -4,7 +4,7 @@ export default defineConfig({
   test: {
     css: false,
     environment: "happy-dom",
-    include: ["panel/**/*.test.{js,ts}"],
+    include: ["resources/**/*.test.{js,ts}"],
     reporter: "dot",
     setupFiles: ["vitest.setup.js"]
   }

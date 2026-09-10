@@ -5,6 +5,7 @@
 # Tools
 .editorconfig export-ignore
 .php-cs-fixer.php export-ignore
+vite.frontend.config.mjs export-ignore
 vitest.config.mjs export-ignore
 vitest.setup.js export-ignore
 phpmd.xml export-ignore
@@ -19,7 +20,7 @@ scripts/init.php -export-ignore
 # Panel build sources
 .yarnrc.yml export-ignore
 package.json export-ignore
-panel/ export-ignore
+resources/ export-ignore
 yarn.lock export-ignore
 
 # Plugin

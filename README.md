@@ -30,9 +30,10 @@ To initialize the plugin manually instead:
    - Replace the PSR-4 namespace.
    - Set the `installer-name`.
    - Remove the `plugin:init` script.
-2. Replace the plugin ID in `index.php` and `panel/index.js`.
+2. Replace the plugin ID in `index.php`, `resources/panel/index.js` and
+   `resources/frontend/index.js`.
 3. Install the frontend dependencies with `yarn install --immutable`, run
-   `yarn build` and commit the generated Panel assets.
+   `yarn build` and commit the generated assets.
 4. Update the namespace and plugin ID assertions in `tests/PluginTest.php`.
 5. Replace the placeholder title, description and installation details in this README.
 6. Delete `scripts/init.php`, `tests/PluginInitializerTest.php` and this
@@ -41,14 +42,16 @@ To initialize the plugin manually instead:
 ----
 <!-- plugin-init:end -->
 
-## 🛠️ Panel development
+## 🛠️ Frontend development
 
-Run `yarn dev` while developing the Panel interface and `yarn test:unit` for
-Panel JavaScript tests. Run `yarn asset:check` before
-committing changes. The generated root-level `index.js` and, when styles are
-present, `index.css` must be committed so Composer installations are ready to
-run without Node.js or Yarn. CI verifies that these files match the sources in
-`panel/`.
+Run `yarn dev:panel` while developing the Panel interface and
+`yarn dev:frontend` while developing public frontend assets. Run
+`yarn test:unit` for JavaScript tests and `yarn asset:check` before committing
+changes. The generated root-level `index.js` and, when styles are present,
+`index.css` must be committed for Kirby's Panel autoloading. Generated
+frontend assets in `assets/dist/` must also be committed so Composer
+installations are ready to run without Node.js or Yarn. CI verifies that these
+files match the sources in `resources/`.
 
 ## 🚀 How to use
 

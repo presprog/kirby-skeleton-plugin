@@ -53,8 +53,6 @@ Install this plugin via **Composer**:
 composer require presprog/my-kirby-plugin
 ```
 
-Or **download the ZIP file** from GitHub and unpack it to `site/plugins/my-kirby-plugin`
-
 ## ✅ To do
 
 …

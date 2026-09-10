@@ -9,5 +9,6 @@
     'pageMethods'  => require __DIR__ . '/methods/page.php',
     'pagesMethods' => require __DIR__ . '/methods/pages.php',
     'siteMethods'  => require __DIR__ . '/methods/site.php',
-    'snippets'     => require __DIR__ . '/extensions/snippets.php'
+    'snippets'     => require __DIR__ . '/extensions/snippets.php',
+    'translations' => require __DIR__ . '/extensions/translations.php'
 ]);

@@ -34,5 +34,13 @@ final class PluginTest extends TestCase
             dirname(__DIR__) . '/extensions/../snippets/example.php',
             $extensions['snippets']['presprog/my-kirby-plugin/example']
         );
+        self::assertSame(
+            'My Kirby plugin',
+            $extensions['translations']['en']['presprog.my-kirby-plugin.example']
+        );
+        self::assertSame(
+            'Mein Kirby Plugin',
+            $extensions['translations']['de']['presprog.my-kirby-plugin.example']
+        );
     }
 }

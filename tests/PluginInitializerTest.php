@@ -28,6 +28,7 @@ final class PluginInitializerTest extends TestCase
             'scripts',
             'snippets',
             'tests',
+            'translations',
             'tools'
         ] as $directory) {
             if (!mkdir($this->project . '/' . $directory, 0777, true)) {
@@ -58,6 +59,8 @@ final class PluginInitializerTest extends TestCase
             'resources/panel/index.test.js',
             'snippets/example.php',
             'tests/PluginTest.php',
+            'translations/de.yml',
+            'translations/en.yml',
             'scripts/init.php'
         ] as $path) {
             if (!copy(dirname(__DIR__) . '/' . $path, $this->project . '/' . $path)) {
@@ -117,6 +120,10 @@ final class PluginInitializerTest extends TestCase
         self::assertStringContainsString(
             "'your-vendor/your-plugin/example'",
             $this->read('extensions/snippets.php')
+        );
+        self::assertStringContainsString(
+            'your-vendor.your-plugin.example',
+            $this->read('translations/en.yml')
         );
         self::assertStringContainsString(
             'panel.plugin("your-vendor/your-plugin"',

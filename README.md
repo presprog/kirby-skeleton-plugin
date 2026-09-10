@@ -61,7 +61,7 @@ Or **download the ZIP file** from GitHub and unpack it to `site/plugins/my-kirby
 
 ## 📄 License
 
-MIT License Copyright © 2024 Present Progressive
+MIT License Copyright © 2026 Present Progressive
 
 ----
 

@@ -2,14 +2,14 @@
 
 # Kirby Skeleton Plugin
 
-This repository is Present Progressive's starting point for Kirby 5 plugins. It keeps the repeated plugin setup in one place: Composer metadata, Kirby extension folders, PHP quality tools, tests, Panel assets, frontend assets and a one-command initializer.
+This repository is our opinionated starting point for Kirby 5 plugins to save us the time and effort of setting up a new plugin.
 
 > Requires Kirby 5 and PHP 8.4 or later.
 
 ## What it provides
 
 - Kirby plugin registration with starter extensions for commands, config options, fields, hooks, methods, snippets and translations
-- Composer setup for Kirby 5 plugins with isolated quality tools via `bamarni/composer-bin-plugin`
+- Composer setup with isolated quality tools via `bamarni/composer-bin-plugin`
 - PHPUnit, Psalm, PHP CS Fixer and Composer validation scripts
 - Panel and frontend asset tooling with Yarn, Kirbyup, Vite and Vitest
 - Committed generated assets so Composer installations are ready to run
@@ -82,3 +82,5 @@ MIT License Copyright © 2026 Present Progressive
 <img src=".github/logo.svg?raw=true" width="200" height="43">
 
 Made by [Present Progressive](https://www.presentprogressive.de) for the Kirby community.
+
+*This skeleton was created with AI assistance.*

@@ -37,6 +37,7 @@ jobs:
   test:
     name: PHP ${{ matrix.php-version }} / Kirby ${{ matrix.dependencies }}
     runs-on: ubuntu-latest
+    continue-on-error: ${{ matrix.experimental || false }}
     strategy:
       fail-fast: false
       matrix:
@@ -50,6 +51,10 @@ jobs:
           - php-version: '8.5'
             dependencies: latest
             suite: tests
+          - php-version: '8.5'
+            dependencies: alpha
+            suite: tests
+            experimental: true
 
     steps:
       - uses: actions/checkout@v6
@@ -67,6 +72,10 @@ jobs:
       - name: Install lowest dependencies
         if: matrix.dependencies == 'lowest'
         run: composer update --prefer-lowest --prefer-stable --prefer-dist --no-progress --no-plugins
+
+      - name: Install Kirby 6 Alpha dependencies
+        if: matrix.dependencies == 'alpha'
+        run: composer require --dev "getkirby/cms:^6.0@alpha" --prefer-dist --no-progress
 
       - name: Install tools for lowest dependencies
         if: matrix.dependencies == 'lowest'

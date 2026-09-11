@@ -66,6 +66,13 @@ yarn asset:check
 
 Use `yarn dev:panel` while developing the Panel interface and `yarn dev:frontend` while developing public frontend assets. The generated root-level `index.js` and, when styles are present, `index.css` must be committed for Kirby's Panel autoloading. Generated frontend assets in `assets/dist/` must also be committed so Composer installations are ready to run without Node.js or Yarn. CI verifies that these files match the sources in `resources/`.
 
+### Test Pipeline & CI
+
+The automated GitHub Actions workflow (`.github/workflows/tests.yml`) validates pull requests and pushes against `main`:
+
+- **Panel & Assets**: Tests JavaScript components with Vitest (`yarn test:unit`) and verifies that committed compiled assets match their source files (`yarn asset:check`).
+- **PHP Matrix**: Tests PHPUnit test suites and static analysis (`composer analyze`) across PHP 8.4 and 8.5 against both `lowest` and `latest` stable dependencies, plus experimental builds against Kirby pre-releases (Kirby 6 Alpha).
+
 ## License
 
 MIT License Copyright © 2026 Present Progressive

@@ -77,6 +77,13 @@ Check that generated assets match their sources:
 yarn asset:check
 ```
 
+### Test Pipeline & CI
+
+The automated GitHub Actions workflow (`.github/workflows/tests.yml`) validates pull requests and pushes against `main`:
+
+- **Panel & Assets**: Tests JavaScript components with Vitest (`yarn test:unit`) and verifies that committed compiled assets match their source files (`yarn asset:check`).
+- **PHP Matrix**: Tests PHPUnit test suites and static analysis across PHP 8.4 and 8.5 against `lowest`, `latest`, and pre-release dependencies.
+
 ## License
 
 MIT License Copyright © 2026 Present Progressive

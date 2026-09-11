@@ -5,6 +5,7 @@
 
 \Kirby\Cms\App::plugin('presprog/my-kirby-plugin', [
     'fileMethods'  => require __DIR__ . '/methods/file.php',
+    'fields'       => require __DIR__ . '/extensions/fields.php',
     'hooks'        => require __DIR__ . '/extensions/hooks.php',
     'options'      => require __DIR__ . '/extensions/options.php',
     'pageMethods'  => require __DIR__ . '/methods/page.php',

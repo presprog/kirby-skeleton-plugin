@@ -25,6 +25,7 @@ final class PluginInitializerTest extends TestCase
             'resources',
             'resources/frontend',
             'resources/panel',
+            'resources/panel/fields',
             'scripts',
             'snippets',
             'tests',
@@ -39,6 +40,7 @@ final class PluginInitializerTest extends TestCase
         foreach ([
             'composer.json',
             'classes/MyPlugin.php',
+            'extensions/fields.php',
             'extensions/hooks.php',
             'extensions/options.php',
             'extensions/snippets.php',
@@ -56,6 +58,7 @@ final class PluginInitializerTest extends TestCase
             'resources/frontend/index.js',
             'resources/frontend/index.test.js',
             'resources/panel/index.css',
+            'resources/panel/fields/example.js',
             'resources/panel/index.js',
             'resources/panel/index.test.js',
             'snippets/example.php',
@@ -131,11 +134,23 @@ final class PluginInitializerTest extends TestCase
             $this->read('resources/panel/index.js')
         );
         self::assertStringContainsString(
+            '"your-plugin-example"',
+            $this->read('resources/panel/index.js')
+        );
+        self::assertStringContainsString(
+            "'your-plugin-example'",
+            $this->read('extensions/fields.php')
+        );
+        self::assertStringContainsString(
             'panel.plugin).toHaveBeenCalledWith("your-vendor/your-plugin"',
             $this->read('resources/panel/index.test.js')
         );
         self::assertStringContainsString(
             'panel.plugin("your-vendor/your-plugin"',
+            $this->read('index.js')
+        );
+        self::assertStringContainsString(
+            '"your-plugin-example"',
             $this->read('index.js')
         );
         self::assertStringContainsString(

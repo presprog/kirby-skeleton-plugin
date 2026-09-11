@@ -7,6 +7,7 @@ final class PluginInitializer
     private const DEFAULT_PACKAGE   = 'presprog/my-kirby-plugin';
     private const DEFAULT_PLUGIN    = 'presprog/my-kirby-plugin';
     private const DEFAULT_PREFIX    = 'presprog.my-kirby-plugin';
+    private const DEFAULT_SLUG      = 'my-plugin';
 
     public function __construct(private readonly string $root)
     {
@@ -192,6 +193,7 @@ final class PluginInitializer
             $contents = str_replace(self::DEFAULT_NAMESPACE, $identity['namespace'], $contents);
             $contents = str_replace(self::DEFAULT_PLUGIN, $identity['plugin'], $contents);
             $contents = str_replace(self::DEFAULT_PREFIX, str_replace('/', '.', $identity['plugin']), $contents);
+            $contents = str_replace(self::DEFAULT_SLUG . '-example', $identity['slug'] . '-example', $contents);
             $contents = str_replace(
                 'final class ' . self::DEFAULT_CLASS,
                 'final class ' . $identity['class'],

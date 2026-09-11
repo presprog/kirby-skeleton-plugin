@@ -25,6 +25,7 @@ final class PluginTest extends TestCase
         $extensions = $plugin->extends();
 
         self::assertSame([], $extensions['fileMethods']);
+        self::assertSame('text', $extensions['fields']['my-plugin-example']['extends']);
         self::assertArrayHasKey('page.update:after', $extensions['hooks']);
         self::assertIsCallable($extensions['hooks']['page.update:after']);
         self::assertSame(['enabled' => true], $extensions['options']);

@@ -4,6 +4,7 @@
 @include_once __DIR__ . '/helpers.php';
 
 \Kirby\Cms\App::plugin('presprog/my-kirby-plugin', [
+    'commands'     => require __DIR__ . '/extensions/commands.php',
     'fileMethods'  => require __DIR__ . '/methods/file.php',
     'fields'       => require __DIR__ . '/extensions/fields.php',
     'hooks'        => require __DIR__ . '/extensions/hooks.php',

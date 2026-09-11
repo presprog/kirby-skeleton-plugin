@@ -40,6 +40,7 @@ final class PluginInitializerTest extends TestCase
         foreach ([
             'composer.json',
             'classes/MyPlugin.php',
+            'extensions/commands.php',
             'extensions/fields.php',
             'extensions/hooks.php',
             'extensions/options.php',
@@ -120,6 +121,10 @@ final class PluginInitializerTest extends TestCase
         self::assertStringContainsString(
             "App::plugin('your-vendor/your-plugin'",
             $this->read('index.php')
+        );
+        self::assertStringContainsString(
+            "'your-plugin:about'",
+            $this->read('extensions/commands.php')
         );
         self::assertStringContainsString(
             "'your-vendor/your-plugin/example'",

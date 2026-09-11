@@ -24,6 +24,21 @@ final class PluginTest extends TestCase
 
         $extensions = $plugin->extends();
 
+        self::assertIsCallable($extensions['commands']['my-plugin:about']['command']);
+        self::assertSame(
+            'Prints information about the plugin.',
+            $extensions['commands']['my-plugin:about']['description']
+        );
+        $cli = new class () {
+            public string|null $output = null;
+
+            public function out(string $message): void
+            {
+                $this->output = $message;
+            }
+        };
+        $extensions['commands']['my-plugin:about']['command']($cli);
+        self::assertSame('I am the Kirby skeleton plugin by Present Progressive', $cli->output);
         self::assertSame([], $extensions['fileMethods']);
         self::assertSame('text', $extensions['fields']['my-plugin-example']['extends']);
         self::assertArrayHasKey('page.update:after', $extensions['hooks']);

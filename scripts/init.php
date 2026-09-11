@@ -194,6 +194,7 @@ final class PluginInitializer
             $contents = str_replace(self::DEFAULT_PLUGIN, $identity['plugin'], $contents);
             $contents = str_replace(self::DEFAULT_PREFIX, str_replace('/', '.', $identity['plugin']), $contents);
             $contents = str_replace(self::DEFAULT_SLUG . '-example', $identity['slug'] . '-example', $contents);
+            $contents = str_replace(self::DEFAULT_SLUG . ':', $identity['slug'] . ':', $contents);
             $contents = str_replace(
                 'final class ' . self::DEFAULT_CLASS,
                 'final class ' . $identity['class'],

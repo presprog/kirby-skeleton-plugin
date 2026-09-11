@@ -27,6 +27,11 @@
       "PresProg\\MyPlugin\\": "classes/"
     }
   },
+  "autoload-dev": {
+    "psr-4": {
+      "PresProg\\MyPlugin\\Tests\\": "tests/"
+    }
+  },
   "config": {
     "allow-plugins": {
       "bamarni/composer-bin-plugin": true,

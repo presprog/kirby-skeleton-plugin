@@ -3,7 +3,7 @@
 namespace PresProg\MyPlugin\Tests;
 
 use Kirby\Cms\App;
-use Kirby\Cms\Plugin;
+use Kirby\Plugin\Plugin;
 use PHPUnit\Framework\TestCase;
 use PresProg\MyPlugin\MyPlugin;
 use PresProg\MyPlugin\Options;

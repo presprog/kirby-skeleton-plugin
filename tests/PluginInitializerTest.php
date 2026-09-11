@@ -114,6 +114,8 @@ final class PluginInitializerTest extends TestCase
         self::assertSame('your-vendor/kirby-your-plugin', $composer['name']);
         self::assertSame('classes/', $composer['autoload']['psr-4']['YourVendor\\YourPlugin\\']);
         self::assertArrayNotHasKey('PresProg\\MyPlugin\\', $composer['autoload']['psr-4']);
+        self::assertSame('tests/', $composer['autoload-dev']['psr-4']['YourVendor\\YourPlugin\\Tests\\']);
+        self::assertArrayNotHasKey('PresProg\\MyPlugin\\Tests\\', $composer['autoload-dev']['psr-4']);
         self::assertSame('your-plugin', $composer['extra']['installer-name']);
         self::assertArrayNotHasKey('plugin:init', $composer['scripts']);
         self::assertFileExists($this->project . '/classes/YourPlugin.php');

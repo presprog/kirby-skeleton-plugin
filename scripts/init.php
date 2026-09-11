@@ -180,7 +180,11 @@ final class PluginInitializer
         $composer['description'] = $identity['description'];
         unset($composer['autoload']['psr-4'][self::DEFAULT_NAMESPACE . '\\']);
         $composer['autoload']['psr-4'][$identity['namespace'] . '\\'] = 'classes/';
-        $composer['extra']['installer-name']                          = $identity['slug'];
+        if (isset($composer['autoload-dev']['psr-4'][self::DEFAULT_NAMESPACE . '\\Tests\\'])) {
+            unset($composer['autoload-dev']['psr-4'][self::DEFAULT_NAMESPACE . '\\Tests\\']);
+            $composer['autoload-dev']['psr-4'][$identity['namespace'] . '\\Tests\\'] = 'tests/';
+        }
+        $composer['extra']['installer-name'] = $identity['slug'];
         unset($composer['scripts']['plugin:init']);
 
         $files = [

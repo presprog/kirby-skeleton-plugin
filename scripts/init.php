@@ -62,7 +62,7 @@ final class PluginInitializer
             throw $exception;
         }
 
-        foreach ([__FILE__, $this->root . '/tests/PluginInitializerTest.php'] as $path) {
+        foreach ([__FILE__, $this->root . '/README.dist.md', $this->root . '/tests/PluginInitializerTest.php'] as $path) {
             if (is_file($path) && !unlink($path)) {
                 fwrite(STDERR, 'Warning: Could not remove ' . basename($path) . PHP_EOL);
             }
@@ -211,28 +211,20 @@ final class PluginInitializer
      */
     private function prepareReadme(array $identity): string
     {
-        $readme = $this->read($this->root . '/README.md');
+        $readme = $this->read($this->root . '/README.dist.md');
         $readme = str_replace('![Kirby Skeleton Plugin]', '![' . $identity['title'] . ']', $readme);
-        $readme = str_replace('# My Kirby plugin readme', '# ' . $identity['title'], $readme);
+        $readme = str_replace('# My Kirby Plugin', '# ' . $identity['title'], $readme);
         $readme = str_replace(
-            'This is our boilerplate for Kirby plugins. Put a short description of what your plugin does here.',
+            'Describe what this Kirby plugin does and when someone should install it.',
             $identity['description'] . '.',
             $readme
         );
         $readme = str_replace('composer require ' . self::DEFAULT_PACKAGE, 'composer require ' . $identity['package'], $readme);
         $readme = str_replace('site/plugins/my-kirby-plugin', 'site/plugins/' . $identity['slug'], $readme);
-
-        $readme = preg_replace(
-            '/\n<!-- plugin-init:start -->.*?<!-- plugin-init:end -->\n/s',
-            "\n",
-            $readme,
-            1,
-            $count
-        );
-
-        if ($readme === null || $count !== 1) {
-            throw new LogicException('Could not find the initialization section in README.md.');
-        }
+        $readme = str_replace(self::DEFAULT_PLUGIN, $identity['plugin'], $readme);
+        $readme = str_replace(self::DEFAULT_PREFIX, str_replace('/', '.', $identity['plugin']), $readme);
+        $readme = str_replace(self::DEFAULT_SLUG . '-example', $identity['slug'] . '-example', $readme);
+        $readme = str_replace(self::DEFAULT_SLUG . ':', $identity['slug'] . ':', $readme);
 
         return $readme;
     }

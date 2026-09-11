@@ -1,16 +1,21 @@
 ![Kirby Skeleton Plugin](/.github/banner.png)
 
-# My Kirby plugin readme
+# Kirby Skeleton Plugin
 
-This is our boilerplate for Kirby plugins. Put a short description of what your plugin does here.
+This repository is Present Progressive's starting point for Kirby 5 plugins. It keeps the repeated plugin setup in one place: Composer metadata, Kirby extension folders, PHP quality tools, tests, Panel assets, frontend assets and a one-command initializer.
 
-> ⚡ Requires Kirby 5 and PHP 8.4 or later.
+> Requires Kirby 5 and PHP 8.4 or later.
 
-----
+## What it provides
 
-<!-- plugin-init:start -->
-> [!NOTE]
-> Initialize the plugin after creating the project, either with the command or manually.
+- Kirby plugin registration with starter extensions for commands, config options, fields, hooks, methods, snippets and translations
+- Composer setup for Kirby 5 plugins with isolated quality tools via `bamarni/composer-bin-plugin`
+- PHPUnit, Psalm, PHP CS Fixer and Composer validation scripts
+- Panel and frontend asset tooling with Yarn, Kirbyup, Vite and Vitest
+- Committed generated assets so Composer installations are ready to run
+- `docs/` for plugin documentation and `README.dist.md` as the derived-plugin README template
+
+## Initialize a plugin
 
 Create a project from this repository and initialize it with its Composer package name:
 
@@ -20,8 +25,9 @@ cd my-new-kirby-plugin
 composer plugin:init your-vendor/kirby-your-plugin
 ```
 
-The initializer removes the conventional `kirby-` package prefix from the Kirby plugin ID and derives the remaining values. For example, `your-vendor/kirby-your-plugin` becomes plugin ID `your-vendor/your-plugin` and namespace `YourVendor\YourPlugin`. Use `--namespace=YourVendor\\YourPlugin` to override the inferred namespace.
-Use `--dry-run` to preview the derived values without changing files.
+The initializer removes the conventional `kirby-` package prefix from the Kirby plugin ID and derives the remaining values. For example, `your-vendor/kirby-your-plugin` becomes plugin ID `your-vendor/your-plugin` and namespace `YourVendor\YourPlugin`.
+
+Use `--namespace=YourVendor\\YourPlugin` to override the inferred namespace. Use `--dry-run` to preview the derived values without changing files.
 
 To initialize the plugin manually instead:
 
@@ -31,50 +37,36 @@ To initialize the plugin manually instead:
    - Set the `installer-name`.
    - Remove the `plugin:init` script.
 2. Rename `classes/MyPlugin.php` and the `MyPlugin` class.
-3. Replace the plugin ID in `index.php`, `resources/panel/index.js` and
-   `resources/frontend/index.js`.
-4. Install the frontend dependencies with `yarn install --immutable`, run
-   `yarn build` and commit the generated assets.
-5. Update the namespace and plugin ID assertions in `tests/PluginTest.php`.
-6. Replace the placeholder title, description and installation details in this README.
-7. Delete `scripts/init.php`, `tests/PluginInitializerTest.php` and this
-   initialization section.
+3. Replace the plugin ID in `index.php`, `resources/panel/index.js` and `resources/frontend/index.js`.
+4. Replace derived names such as `my-plugin-example`, `my-plugin:about` and `presprog.my-kirby-plugin.*`.
+5. Use `README.dist.md` as the basis for the plugin README and then delete `README.dist.md`.
+6. Install the frontend dependencies with `yarn install --immutable`, run `yarn build` and commit the generated assets.
+7. Update the namespace and plugin ID assertions in `tests/PluginTest.php`.
+8. Delete `scripts/init.php`, `tests/PluginInitializerTest.php` and this initialization-specific documentation.
 
-----
-<!-- plugin-init:end -->
+## Development
 
-## 🛠️ Frontend development
-
-Run `yarn dev:panel` while developing the Panel interface and
-`yarn dev:frontend` while developing public frontend assets. Run
-`yarn test:unit` for JavaScript tests and `yarn asset:check` before committing
-changes. The generated root-level `index.js` and, when styles are present,
-`index.css` must be committed for Kirby's Panel autoloading. Generated
-frontend assets in `assets/dist/` must also be committed so Composer
-installations are ready to run without Node.js or Yarn. CI verifies that these
-files match the sources in `resources/`.
-
-## 🚀 How to use
-
-…
-
-## ⚙️ Config
-
-…
-
-## 💻 How to install
-
-Install this plugin via **Composer**:
+Run PHP checks:
 
 ```bash
-composer require presprog/my-kirby-plugin
+composer analyze
 ```
 
-## ✅ To do
+Run JavaScript tests:
 
-…
+```bash
+yarn test:unit
+```
 
-## 📄 License
+Run the asset reproducibility check before committing Panel or frontend asset changes:
+
+```bash
+yarn asset:check
+```
+
+Use `yarn dev:panel` while developing the Panel interface and `yarn dev:frontend` while developing public frontend assets. The generated root-level `index.js` and, when styles are present, `index.css` must be committed for Kirby's Panel autoloading. Generated frontend assets in `assets/dist/` must also be committed so Composer installations are ready to run without Node.js or Yarn. CI verifies that these files match the sources in `resources/`.
+
+## License
 
 MIT License Copyright © 2026 Present Progressive
 

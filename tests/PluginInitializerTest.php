@@ -53,6 +53,7 @@ final class PluginInitializerTest extends TestCase
             'methods/pages.php',
             'methods/site.php',
             'README.md',
+            'README.dist.md',
             'assets/dist/frontend.css',
             'assets/dist/frontend.js',
             'resources/frontend/index.css',
@@ -177,10 +178,14 @@ final class PluginInitializerTest extends TestCase
         );
 
         $readme = $this->read('README.md');
+        self::assertStringContainsString('# Your Plugin', $readme);
         self::assertStringContainsString('composer require your-vendor/kirby-your-plugin', $readme);
-        self::assertStringNotContainsString('plugin-init:start', $readme);
+        self::assertStringContainsString('your-vendor.your-plugin.enabled', $readme);
+        self::assertStringContainsString('type: your-plugin-example', $readme);
+        self::assertStringContainsString('kirby your-plugin:about', $readme);
 
         self::assertFileExists($this->project . '/vendor/autoload.php');
+        self::assertFileDoesNotExist($this->project . '/README.dist.md');
         self::assertFileDoesNotExist($this->project . '/scripts/init.php');
         self::assertFileDoesNotExist($this->project . '/tests/PluginInitializerTest.php');
     }
@@ -200,6 +205,7 @@ final class PluginInitializerTest extends TestCase
         self::assertStringContainsString('PHP class:        YourVendor\\YourPlugin\\YourPlugin', $output);
         self::assertStringContainsString('No files changed.', $output);
         self::assertSame($composerBefore, $this->read('composer.json'));
+        self::assertFileExists($this->project . '/README.dist.md');
         self::assertFileExists($this->project . '/scripts/init.php');
         self::assertFileExists($this->project . '/classes/MyPlugin.php');
     }

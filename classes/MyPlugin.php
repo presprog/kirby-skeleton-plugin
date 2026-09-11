@@ -2,9 +2,11 @@
 
 namespace PresProg\MyPlugin;
 
-/**
- * @psalm-suppress UnusedClass
- */
-final class MyPlugin
+/** @psalm-api */
+final readonly class MyPlugin
 {
+    public function __construct(
+        public Options $options
+    ) {
+    }
 }

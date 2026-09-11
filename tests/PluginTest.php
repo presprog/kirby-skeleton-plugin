@@ -5,6 +5,8 @@ namespace PresProg\MyPlugin\Tests;
 use Kirby\Cms\App;
 use Kirby\Cms\Plugin;
 use PHPUnit\Framework\TestCase;
+use PresProg\MyPlugin\MyPlugin;
+use PresProg\MyPlugin\Options;
 
 final class PluginTest extends TestCase
 {
@@ -44,6 +46,8 @@ final class PluginTest extends TestCase
         self::assertArrayHasKey('page.update:after', $extensions['hooks']);
         self::assertIsCallable($extensions['hooks']['page.update:after']);
         self::assertSame(['enabled' => true], $extensions['options']);
+        $pluginInstance = new MyPlugin(Options::fromConfig($extensions['options']));
+        self::assertTrue($pluginInstance->options->enabled);
         self::assertSame([], $extensions['pageMethods']);
         self::assertSame([], $extensions['pagesMethods']);
         self::assertSame([], $extensions['siteMethods']);

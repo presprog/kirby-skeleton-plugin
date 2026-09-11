@@ -36,6 +36,8 @@ return [
 ];
 ```
 
+Instantiate the main plugin class with `Options::fromConfig()` when plugin code needs typed access to the configured values.
+
 ## Panel Field
 
 The skeleton includes an example Panel field scaffold. Use it in a blueprint like this:

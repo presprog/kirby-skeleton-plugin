@@ -195,11 +195,12 @@ final class PluginInitializer
             $contents = str_replace(self::DEFAULT_PREFIX, str_replace('/', '.', $identity['plugin']), $contents);
             $contents = str_replace(self::DEFAULT_SLUG . '-example', $identity['slug'] . '-example', $contents);
             $contents = str_replace(self::DEFAULT_SLUG . ':', $identity['slug'] . ':', $contents);
-            $contents = str_replace(
-                'final class ' . self::DEFAULT_CLASS,
-                'final class ' . $identity['class'],
-                $contents
-            );
+            $contents = preg_replace(
+                '/\bclass\s+' . preg_quote(self::DEFAULT_CLASS, '/') . '\b/',
+                'class ' . $identity['class'],
+                $contents,
+                1
+            ) ?? $contents;
             $files[$path] = $contents;
         }
 
@@ -291,11 +292,10 @@ final class PluginInitializer
         sort($files);
 
         foreach ([
-            $this->root . '/index.js'                                => self::DEFAULT_PLUGIN,
-            $this->root . '/index.php'                               => self::DEFAULT_PLUGIN,
-            $this->root . '/classes/' . self::DEFAULT_CLASS . '.php' => 'final class ' . self::DEFAULT_CLASS,
-            $this->root . '/resources/frontend/index.js'             => self::DEFAULT_PLUGIN,
-            $this->root . '/resources/panel/index.js'                => self::DEFAULT_PLUGIN
+            $this->root . '/index.js'                    => self::DEFAULT_PLUGIN,
+            $this->root . '/index.php'                   => self::DEFAULT_PLUGIN,
+            $this->root . '/resources/frontend/index.js' => self::DEFAULT_PLUGIN,
+            $this->root . '/resources/panel/index.js'    => self::DEFAULT_PLUGIN
         ] as $path => $needle) {
             if (!is_file($path)) {
                 continue;
@@ -304,6 +304,12 @@ final class PluginInitializer
             if (!str_contains($this->read($path), $needle)) {
                 throw new LogicException('Could not find the skeleton placeholder in ' . $path);
             }
+        }
+
+        $classPath = $this->root . '/classes/' . self::DEFAULT_CLASS . '.php';
+
+        if (is_file($classPath) && preg_match('/\bclass\s+' . preg_quote(self::DEFAULT_CLASS, '/') . '\b/', $this->read($classPath)) !== 1) {
+            throw new LogicException('Could not find the skeleton placeholder in ' . $classPath);
         }
 
         return array_values(array_unique($files));

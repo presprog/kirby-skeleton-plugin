@@ -40,6 +40,7 @@ final class PluginInitializerTest extends TestCase
         foreach ([
             'composer.json',
             'classes/MyPlugin.php',
+            'classes/Options.php',
             'extensions/commands.php',
             'extensions/fields.php',
             'extensions/hooks.php',
@@ -117,7 +118,8 @@ final class PluginInitializerTest extends TestCase
         self::assertArrayNotHasKey('plugin:init', $composer['scripts']);
         self::assertFileExists($this->project . '/classes/YourPlugin.php');
         self::assertFileDoesNotExist($this->project . '/classes/MyPlugin.php');
-        self::assertStringContainsString('final class YourPlugin', $this->read('classes/YourPlugin.php'));
+        self::assertStringContainsString('class YourPlugin', $this->read('classes/YourPlugin.php'));
+        self::assertStringContainsString('namespace YourVendor\\YourPlugin;', $this->read('classes/Options.php'));
 
         self::assertStringContainsString(
             "App::plugin('your-vendor/your-plugin'",

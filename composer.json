@@ -16,7 +16,8 @@
   },
   "require-dev": {
     "bamarni/composer-bin-plugin": "^1.9",
-    "getkirby/cms": "^5.0"
+    "getkirby/cms": "^5.0",
+    "phpunit/phpunit": "^12.5"
   },
   "conflict": {
     "getkirby/cms": "<5.0"
@@ -54,7 +55,7 @@
     "cscheck": "@php tools/phpcs/vendor/bin/php-cs-fixer check --diff",
     "csfix": "@php tools/phpcs/vendor/bin/php-cs-fixer fix",
     "psalm": "@php tools/psalm/vendor/bin/psalm",
-    "tests": "@php tools/phpunit/vendor/bin/phpunit",
-    "tests:coverage": "XDEBUG_MODE=coverage tools/phpunit/vendor/bin/phpunit --coverage-html=tests/coverage"
+    "tests": "phpunit",
+    "tests:coverage": "XDEBUG_MODE=coverage phpunit --coverage-html=tests/coverage"
   }
 }

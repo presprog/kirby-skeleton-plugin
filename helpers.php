@@ -3,7 +3,7 @@
 use PresProg\MyPlugin\Options;
 
 if (!function_exists('myPlugin')) {
-    function myPlugin(array $config)
+    function myPlugin(array $config): \PresProg\MyPlugin\MyPlugin
     {
         return new PresProg\MyPlugin\MyPlugin(Options::fromConfig($config));
     }

@@ -6,6 +6,6 @@ export default defineConfig({
     environment: "happy-dom",
     include: ["resources/**/*.test.{js,ts}"],
     reporter: "dot",
-    setupFiles: ["vitest.setup.js"]
+    setupFiles: ["resources/vitest.setup.js"]
   }
 })

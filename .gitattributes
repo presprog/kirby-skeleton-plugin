@@ -5,13 +5,15 @@
 # Tools
 .editorconfig export-ignore
 .php-cs-fixer.php export-ignore
-vite.frontend.config.mjs export-ignore
-vitest.config.mjs export-ignore
-vitest.setup.js export-ignore
 phpmd.xml export-ignore
 phpunit.xml export-ignore
 psalm.xml export-ignore
 tools/** export-ignore
+
+# Frontend config
+resources/vite.frontend.config.mjs export-ignore
+resources/vitest.config.mjs export-ignore
+resources/vitest.setup.js export-ignore
 
 # Scripts
 scripts/** export-ignore

@@ -15,7 +15,7 @@
     "test:unit": "vitest run --no-isolate --config resources/vitest.config.mjs"
   },
   "devDependencies": {
-    "happy-dom": "^17.6.3",
+    "happy-dom": "^20",
     "kirbyup": "3.4.1",
     "vite": "^7.3.6",
     "vitest": "^4.1.10"

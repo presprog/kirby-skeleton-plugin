@@ -40,6 +40,7 @@ final class PluginInitializerTest extends TestCase
             'composer.json',
             'classes/MyPlugin.php',
             'extensions/hooks.php',
+            'extensions/options.php',
             'extensions/snippets.php',
             'helpers.php',
             'index.js',

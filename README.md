@@ -13,7 +13,7 @@ This repository is our **opinionated** starting point for Kirby 5 plugins to sav
 - PHPUnit, Psalm, PHP CS Fixer and Composer validation scripts
 - Panel and frontend asset tooling with Yarn, Kirbyup, Vite and Vitest
 - Committed generated assets so Composer installations are ready to run
-- `docs/` for plugin documentation and `README.dist.md` as the derived-plugin README template
+- `README.dist.md` as the derived-plugin README template
 
 ## Initialize a plugin
 

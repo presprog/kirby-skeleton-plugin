@@ -28,12 +28,12 @@ final class InitCommand extends Command
     private const DEFAULT_PREFIX    = 'presprog.my-kirby-plugin';
     private const DEFAULT_SLUG      = 'my-plugin';
 
-    private readonly string $root;
+    private string $root;
 
-    public function __construct(?string $root = null)
+    public function __construct(?string $name = null)
     {
-        parent::__construct();
-        $this->root = $root ?? dirname(__DIR__);
+        parent::__construct($name ?? 'plugin:init');
+        $this->root = dirname(__DIR__);
     }
 
     #[Override]

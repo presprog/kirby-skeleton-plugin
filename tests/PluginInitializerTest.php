@@ -7,6 +7,7 @@ use PHPUnit\Framework\TestCase;
 use PresProg\MyPlugin\InitCommand;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
+use ReflectionProperty;
 use RuntimeException;
 use Symfony\Component\Console\Tester\CommandTester;
 
@@ -399,8 +400,10 @@ final class PluginInitializerTest extends TestCase
      */
     private function runInitializerWithInput(string $input, string ...$arguments): array
     {
-        $command = new InitCommand($this->project);
-        $tester  = new CommandTester($command);
+        $command    = new InitCommand();
+        $reflection = new ReflectionProperty(InitCommand::class, 'root');
+        $reflection->setValue($command, $this->project);
+        $tester = new CommandTester($command);
 
         if ($input !== '') {
             $tester->setInputs(explode(PHP_EOL, rtrim($input, "\r\n")));

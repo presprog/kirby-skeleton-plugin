@@ -116,6 +116,7 @@ final class PluginInitializerTest extends TestCase
         self::assertArrayNotHasKey('PresProg\\MyPlugin\\Tests\\', $composer['autoload-dev']['psr-4']);
         self::assertSame('do-something', $composer['extra']['installer-name']);
         self::assertArrayNotHasKey('plugin:init', $composer['scripts']);
+        self::assertArrayNotHasKey('symfony/console', $composer['require-dev']);
         self::assertFileExists($this->project . '/classes/DoSomething.php');
         self::assertFileDoesNotExist($this->project . '/classes/MyPlugin.php');
         self::assertStringContainsString('class DoSomething', $this->read('classes/DoSomething.php'));

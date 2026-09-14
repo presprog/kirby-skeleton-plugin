@@ -314,7 +314,8 @@ final class InitCommand extends Command
             $composer['autoload-dev']['psr-4'][$identity['namespace'] . '\\Tests\\'] = 'tests/';
         }
         $composer['extra']['installer-name'] = $identity['slug'];
-        unset($composer['scripts']['plugin:init']);
+        unset($composer['scripts']['plugin:init'], $composer['require-dev']['symfony/console']);
+
 
         $files = [
             $composerPath              => $this->encodeJson($composer),

@@ -268,6 +268,108 @@ final class PluginInitializerTest extends TestCase
         self::assertStringContainsString('PHP namespace:    YourVendor\\DoSomething', $output);
     }
 
+    public function testInitializesWithNoInteractionOption(): void
+    {
+        [$exitCode, $output, $error] = $this->runInitializer(
+            'your-vendor/kirby-do-something-plugin',
+            '--no-interaction',
+            '--dry-run'
+        );
+
+        self::assertSame(0, $exitCode, $output . PHP_EOL . $error);
+        self::assertStringNotContainsString('Composer package [', $output);
+        self::assertStringNotContainsString('Kirby plugin [', $output);
+        self::assertStringContainsString('Plugin initialization preview:', $output);
+        self::assertStringContainsString('Kirby plugin:     your-vendor/do-something', $output);
+    }
+
+    public function testInitializesWithShortNoInteractionOption(): void
+    {
+        [$exitCode, $output, $error] = $this->runInitializer(
+            'your-vendor/kirby-do-something-plugin',
+            '-n',
+            '--dry-run'
+        );
+
+        self::assertSame(0, $exitCode, $output . PHP_EOL . $error);
+        self::assertStringNotContainsString('Composer package [', $output);
+        self::assertStringNotContainsString('Kirby plugin [', $output);
+        self::assertStringContainsString('Plugin initialization preview:', $output);
+    }
+
+    public function testInitializesInteractivelyWithCustomValues(): void
+    {
+        $input = implode(PHP_EOL, [
+            'custom-vendor/kirby-custom-tool-plugin',
+            'custom-vendor/custom-tool',
+            'custom-tool',
+            'CustomVendor\\CustomTool',
+            'CustomTool',
+            'Custom Tool',
+            'Custom Tool for Kirby'
+        ]) . PHP_EOL;
+
+        [$exitCode, $output, $error] = $this->runInitializerWithInput(
+            $input,
+            'your-vendor/kirby-do-something-plugin'
+        );
+
+        self::assertSame(0, $exitCode, $output . PHP_EOL . $error);
+        self::assertStringContainsString('Composer package [your-vendor/kirby-do-something-plugin]:', $output);
+        self::assertStringContainsString('Kirby plugin [your-vendor/do-something]:', $output);
+        self::assertStringContainsString('Plugin slug [do-something]:', $output);
+        self::assertStringContainsString('PHP namespace [YourVendor\\DoSomething]:', $output);
+        self::assertStringContainsString('PHP class [DoSomething]:', $output);
+        self::assertStringContainsString('Plugin title [Do Something]:', $output);
+        self::assertStringContainsString('Plugin description [Do Something for Kirby CMS]:', $output);
+
+        $composer = json_decode(
+            $this->read('composer.json'),
+            true,
+            512,
+            JSON_THROW_ON_ERROR
+        );
+
+        self::assertSame('custom-vendor/kirby-custom-tool-plugin', $composer['name']);
+        self::assertSame('Custom Tool for Kirby', $composer['description']);
+        self::assertSame('classes/', $composer['autoload']['psr-4']['CustomVendor\\CustomTool\\']);
+        self::assertSame('tests/', $composer['autoload-dev']['psr-4']['CustomVendor\\CustomTool\\Tests\\']);
+        self::assertSame('custom-tool', $composer['extra']['installer-name']);
+        self::assertFileExists($this->project . '/classes/CustomTool.php');
+        self::assertFileDoesNotExist($this->project . '/classes/MyPlugin.php');
+        self::assertStringContainsString('class CustomTool', $this->read('classes/CustomTool.php'));
+        self::assertStringContainsString('namespace CustomVendor\\CustomTool;', $this->read('classes/Options.php'));
+
+        $readme = $this->read('README.md');
+        self::assertStringContainsString('# Custom Tool', $readme);
+        self::assertStringContainsString('Custom Tool for Kirby.', $readme);
+        self::assertStringContainsString('composer require custom-vendor/kirby-custom-tool-plugin', $readme);
+    }
+
+    public function testRePromptsOnInvalidInteractiveInput(): void
+    {
+        $input = implode(PHP_EOL, [
+            'INVALID_PACKAGE_NAME',
+            'custom-vendor/kirby-valid-plugin',
+            '', // default plugin
+            '', // default slug
+            '', // default namespace
+            '', // default class
+            '', // default title
+            ''  // default description
+        ]) . PHP_EOL;
+
+        [$exitCode, $output, $error] = $this->runInitializerWithInput(
+            $input,
+            'your-vendor/kirby-do-something-plugin',
+            '--dry-run'
+        );
+
+        self::assertSame(0, $exitCode, $output . PHP_EOL . $error);
+        self::assertStringContainsString('The package name must use lowercase kebab-case in the form vendor/package.', $output);
+        self::assertStringContainsString('Composer package: custom-vendor/kirby-valid-plugin', $output);
+    }
+
     private function read(string $path): string
     {
         $contents = file_get_contents($this->project . '/' . $path);
@@ -284,9 +386,18 @@ final class PluginInitializerTest extends TestCase
      */
     private function runInitializer(string ...$arguments): array
     {
+        return $this->runInitializerWithInput('', ...$arguments);
+    }
+
+    /**
+     * @return array{int, string, string}
+     */
+    private function runInitializerWithInput(string $input, string ...$arguments): array
+    {
         $process = proc_open(
             [PHP_BINARY, $this->project . '/scripts/init.php', ...$arguments],
             [
+                0 => ['pipe', 'r'],
                 1 => ['pipe', 'w'],
                 2 => ['pipe', 'w']
             ],
@@ -298,8 +409,15 @@ final class PluginInitializerTest extends TestCase
             throw new RuntimeException('Could not start the initializer.');
         }
 
-        $output   = stream_get_contents($pipes[1]);
-        $error    = stream_get_contents($pipes[2]);
+        if ($input !== '') {
+            fwrite($pipes[0], $input);
+        }
+        fclose($pipes[0]);
+
+        $output = stream_get_contents($pipes[1]);
+        fclose($pipes[1]);
+        $error = stream_get_contents($pipes[2]);
+        fclose($pipes[2]);
         $exitCode = proc_close($process);
 
         return [$exitCode, $output, $error];

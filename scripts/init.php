@@ -9,8 +9,27 @@ final class PluginInitializer
     private const DEFAULT_PREFIX    = 'presprog.my-kirby-plugin';
     private const DEFAULT_SLUG      = 'my-plugin';
 
-    public function __construct(private readonly string $root)
-    {
+    /**
+     * @var resource
+     */
+    private mixed $input;
+
+    /**
+     * @var resource
+     */
+    private mixed $output;
+
+    /**
+     * @param resource|null $input
+     * @param resource|null $output
+     */
+    public function __construct(
+        private readonly string $root,
+        $input = null,
+        $output = null
+    ) {
+        $this->input  = is_resource($input) ? $input : (defined('STDIN') ? STDIN : fopen('php://stdin', 'r'));
+        $this->output = is_resource($output) ? $output : (defined('STDOUT') ? STDOUT : fopen('php://stdout', 'w'));
     }
 
     /**
@@ -19,12 +38,12 @@ final class PluginInitializer
     public function run(array $arguments): int
     {
         if ($arguments === ['--help'] || $arguments === ['-h']) {
-            $this->usage(STDOUT);
+            $this->usage($this->output);
             return 0;
         }
 
         try {
-            [$package, $namespace, $dryRun] = $this->parseArguments($arguments);
+            [$package, $namespace, $dryRun, $noInteraction] = $this->parseArguments($arguments);
         } catch (InvalidArgumentException $exception) {
             $this->usage(STDERR);
             fwrite(STDERR, PHP_EOL . 'Error: ' . $exception->getMessage() . PHP_EOL);
@@ -32,6 +51,10 @@ final class PluginInitializer
         }
 
         $identity = $this->identity($package, $namespace);
+
+        if ($noInteraction === false) {
+            $identity = $this->interact($identity);
+        }
 
         if ($dryRun === true) {
             $this->success($identity, true);
@@ -75,17 +98,23 @@ final class PluginInitializer
 
     /**
      * @param list<string> $arguments
-     * @return array{string, string|null, bool}
+     * @return array{string, string|null, bool, bool}
      */
     private function parseArguments(array $arguments): array
     {
-        $package   = null;
-        $namespace = null;
-        $dryRun    = false;
+        $package       = null;
+        $namespace     = null;
+        $dryRun        = false;
+        $noInteraction = false;
 
         foreach ($arguments as $argument) {
             if ($argument === '--dry-run') {
                 $dryRun = true;
+                continue;
+            }
+
+            if ($argument === '--no-interaction' || $argument === '-n') {
+                $noInteraction = true;
                 continue;
             }
 
@@ -120,7 +149,7 @@ final class PluginInitializer
             throw new InvalidArgumentException('The namespace is not a valid PHP namespace.');
         }
 
-        return [$package, $namespace, $dryRun];
+        return [$package, $namespace, $dryRun, $noInteraction];
     }
 
     /**
@@ -218,7 +247,7 @@ final class PluginInitializer
         $readme = str_replace('# My Kirby Plugin', '# ' . $identity['title'], $readme);
         $readme = str_replace(
             'Describe what this Kirby plugin does and when someone should install it.',
-            $identity['description'] . '.',
+            rtrim($identity['description'], '.') . '.',
             $readme
         );
         $readme = str_replace('composer require ' . self::DEFAULT_PACKAGE, 'composer require ' . $identity['package'], $readme);
@@ -405,12 +434,14 @@ Usage:
 
 Options:
   --namespace=YourVendor\PluginName  Override the inferred PHP namespace.
+  -n, --no-interaction               Do not ask any interactive question.
   --dry-run                          Show derived values without changing files.
   -h, --help                         Show this help.
 
 Examples:
   composer plugin:init your-vendor/kirby-do-something-plugin
   composer plugin:init your-vendor/kirby-do-something-plugin --namespace=YourVendor\DoSomething
+  composer plugin:init your-vendor/kirby-do-something-plugin --no-interaction
 
 TXT
         );
@@ -418,19 +449,114 @@ TXT
 
     /**
      * @param array{package: string, plugin: string, slug: string, namespace: string, class: string, title: string, description: string} $identity
+     * @return array{package: string, plugin: string, slug: string, namespace: string, class: string, title: string, description: string}
+     */
+    private function interact(array $identity): array
+    {
+        $package = $this->ask(
+            'Composer package',
+            $identity['package'],
+            static fn (string $value): bool => preg_match('/^[a-z0-9]+(?:-[a-z0-9]+)*\/[a-z0-9]+(?:-[a-z0-9]+)*$/', $value) === 1,
+            'The package name must use lowercase kebab-case in the form vendor/package.'
+        );
+
+        $plugin = $this->ask(
+            'Kirby plugin',
+            $identity['plugin'],
+            static fn (string $value): bool => preg_match('/^[a-z0-9]+(?:-[a-z0-9]+)*\/[a-z0-9]+(?:-[a-z0-9]+)*$/', $value) === 1,
+            'The plugin ID must use lowercase kebab-case in the form vendor/plugin-name.'
+        );
+
+        $slug = $this->ask(
+            'Plugin slug',
+            $identity['slug'],
+            static fn (string $value): bool => preg_match('/^[a-z0-9]+(?:-[a-z0-9]+)*$/', $value) === 1,
+            'The plugin slug must use lowercase kebab-case.'
+        );
+
+        $namespace = $this->ask(
+            'PHP namespace',
+            $identity['namespace'],
+            static fn (string $value): bool => preg_match('/^[A-Za-z_][A-Za-z0-9_]*(?:\\\\[A-Za-z_][A-Za-z0-9_]*)*$/', $value) === 1,
+            'The namespace is not a valid PHP namespace.'
+        );
+
+        $class = $this->ask(
+            'PHP class',
+            $identity['class'],
+            static fn (string $value): bool => preg_match('/^[A-Za-z_][A-Za-z0-9_]*$/', $value) === 1,
+            'The class name is not a valid PHP class name.'
+        );
+
+        $title = $this->ask(
+            'Plugin title',
+            $identity['title'],
+            static fn (string $value): bool => trim($value) !== '',
+            'The plugin title cannot be empty.'
+        );
+
+        $description = $this->ask(
+            'Plugin description',
+            $identity['description'],
+            static fn (string $value): bool => trim($value) !== '',
+            'The plugin description cannot be empty.'
+        );
+
+        return [
+            'package'     => $package,
+            'plugin'      => $plugin,
+            'slug'        => $slug,
+            'namespace'   => $namespace,
+            'class'       => $class,
+            'title'       => $title,
+            'description' => $description
+        ];
+    }
+
+    /**
+     * @param callable(string): bool|null $validator
+     */
+    private function ask(string $label, string $default, ?callable $validator = null, ?string $errorMessage = null): string
+    {
+        while (true) {
+            fwrite($this->output, $label . ' [' . $default . ']: ');
+            $input = fgets($this->input);
+
+            if ($input === false) {
+                return $default;
+            }
+
+            $value = trim($input);
+
+            if ($value === '') {
+                return $default;
+            }
+
+            if ($validator === null || $validator($value) === true) {
+                return $value;
+            }
+
+            if ($errorMessage !== null) {
+                fwrite($this->output, 'Error: ' . $errorMessage . PHP_EOL);
+            }
+        }
+    }
+
+    /**
+     * @param array{package: string, plugin: string, slug: string, namespace: string, class: string, title: string, description: string} $identity
      */
     private function success(array $identity, bool $dryRun = false): void
     {
-        echo PHP_EOL;
-        echo ($dryRun ? 'Plugin initialization preview:' : 'Plugin initialized:') . PHP_EOL;
-        echo '  Composer package: ' . $identity['package'] . PHP_EOL;
-        echo '  Kirby plugin:     ' . $identity['plugin'] . PHP_EOL;
-        echo '  PHP namespace:    ' . $identity['namespace'] . PHP_EOL;
-        echo '  PHP class:        ' . $identity['namespace'] . '\\' . $identity['class'] . PHP_EOL;
-        echo '  Plugin directory: ' . $identity['slug'] . PHP_EOL;
+        fwrite($this->output, PHP_EOL);
+        fwrite($this->output, ($dryRun ? 'Plugin initialization preview:' : 'Plugin initialized:') . PHP_EOL);
+        fwrite($this->output, '  Composer package: ' . $identity['package'] . PHP_EOL);
+        fwrite($this->output, '  Kirby plugin:     ' . $identity['plugin'] . PHP_EOL);
+        fwrite($this->output, '  PHP namespace:    ' . $identity['namespace'] . PHP_EOL);
+        fwrite($this->output, '  PHP class:        ' . $identity['namespace'] . '\\' . $identity['class'] . PHP_EOL);
+        fwrite($this->output, '  Plugin directory: ' . $identity['slug'] . PHP_EOL);
 
         if ($dryRun === true) {
-            echo PHP_EOL . 'No files changed.' . PHP_EOL;
+            fwrite($this->output, PHP_EOL . 'No files changed.' . PHP_EOL);
         }
     }
 }

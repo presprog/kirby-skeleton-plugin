@@ -25,9 +25,9 @@ cd my-new-kirby-plugin
 composer plugin:init your-vendor/kirby-do-something-plugin
 ```
 
-The initializer removes the conventional `kirby-` package prefix and `-plugin` suffix from the Kirby plugin ID and derives the remaining values. For example, `your-vendor/kirby-do-something-plugin` becomes plugin ID `your-vendor/do-something` and namespace `YourVendor\DoSomething`.
+The initializer interactively asks for each identity property, using the auto-generated values as defaults. It removes the conventional `kirby-` package prefix and `-plugin` suffix from the Kirby plugin ID and derives the remaining values. For example, `your-vendor/kirby-do-something-plugin` defaults to plugin ID `your-vendor/do-something` and namespace `YourVendor\DoSomething`.
 
-Use `--namespace=YourVendor\\DoSomething` to override the inferred namespace. Use `--dry-run` to preview the derived values without changing files.
+Use `-n` or `--no-interaction` to run without interactive prompts, `--namespace=YourVendor\\DoSomething` to override the inferred namespace, or `--dry-run` to preview the derived values without changing files.
 
 > **To initialize the plugin manually instead:**
 >

@@ -3,15 +3,16 @@
 @include_once __DIR__ . '/vendor/autoload.php';
 @include_once __DIR__ . '/helpers.php';
 
+$methods = require __DIR__ . '/extensions/methods.php';
+
 \Kirby\Cms\App::plugin('presprog/my-kirby-plugin', [
     'commands'     => require __DIR__ . '/extensions/commands.php',
-    'fileMethods'  => require __DIR__ . '/methods/file.php',
     'fields'       => require __DIR__ . '/extensions/fields.php',
+    'fileMethods'  => $methods['fileMethods'] ?? [],
     'hooks'        => require __DIR__ . '/extensions/hooks.php',
     'options'      => require __DIR__ . '/extensions/options.php',
-    'pageMethods'  => require __DIR__ . '/methods/page.php',
-    'pagesMethods' => require __DIR__ . '/methods/pages.php',
-    'siteMethods'  => require __DIR__ . '/methods/site.php',
+    'pageMethods'  => $methods['pageMethods'] ?? [],
+    'siteMethods'  => $methods['siteMethods'] ?? [],
     'snippets'     => require __DIR__ . '/extensions/snippets.php',
     'translations' => require __DIR__ . '/extensions/translations.php'
 ]);

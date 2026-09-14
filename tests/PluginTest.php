@@ -41,16 +41,16 @@ final class PluginTest extends TestCase
         };
         $extensions['commands']['my-plugin:about']['command']($cli);
         self::assertSame('I am the Kirby skeleton plugin by Present Progressive', $cli->output);
-        self::assertSame([], $extensions['fileMethods']);
         self::assertSame('text', $extensions['fields']['my-plugin-example']['extends']);
         self::assertArrayHasKey('page.update:after', $extensions['hooks']);
         self::assertIsCallable($extensions['hooks']['page.update:after']);
         self::assertSame(['enabled' => true], $extensions['options']);
         $pluginInstance = new MyPlugin(Options::fromConfig($extensions['options']));
         self::assertTrue($pluginInstance->options->enabled);
+        self::assertSame([], $extensions['fileMethods']);
         self::assertSame([], $extensions['pageMethods']);
-        self::assertSame([], $extensions['pagesMethods']);
         self::assertSame([], $extensions['siteMethods']);
+        self::assertArrayNotHasKey('pagesMethods', $extensions);
         self::assertSame(
             dirname(__DIR__) . '/extensions/../snippets/example.php',
             $extensions['snippets']['presprog/my-kirby-plugin/example']

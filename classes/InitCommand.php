@@ -403,7 +403,7 @@ final class InitCommand extends Command
             }
         }
 
-        foreach (['assets/dist', 'classes', 'extensions', 'methods', 'resources', 'snippets', 'tests', 'translations'] as $directory) {
+        foreach (['assets/dist', 'classes', 'extensions', 'resources', 'snippets', 'tests', 'translations'] as $directory) {
             if (!is_dir($this->root . '/' . $directory)) {
                 continue;
             }

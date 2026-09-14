@@ -2,6 +2,8 @@
 
 namespace PresProg\MyPlugin;
 
+use Kirby\Cms\App;
+
 /** @psalm-api */
 final readonly class Options
 {
@@ -10,13 +12,12 @@ final readonly class Options
     ) {
     }
 
-    /**
-     * @param array{enabled?: bool} $config
-     */
-    public static function fromConfig(array $config): self
+    public static function fromConfig(?App $kirby = null): self
     {
+        $kirby ??= App::instance(null, true);
+
         return new self(
-            enabled: $config['enabled'] ?? true
+            enabled: (bool)($kirby?->option('presprog.my-kirby-plugin.enabled', true) ?? true)
         );
     }
 }

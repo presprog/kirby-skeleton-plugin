@@ -45,7 +45,7 @@ final class PluginTest extends TestCase
         self::assertArrayHasKey('page.update:after', $extensions['hooks']);
         self::assertIsCallable($extensions['hooks']['page.update:after']);
         self::assertSame(['enabled' => true], $extensions['options']);
-        $pluginInstance = new MyPlugin(Options::fromConfig($extensions['options']));
+        $pluginInstance = new MyPlugin(Options::fromConfig());
         self::assertTrue($pluginInstance->options->enabled);
         self::assertSame([], $extensions['fileMethods']);
         self::assertSame([], $extensions['pageMethods']);
@@ -63,5 +63,26 @@ final class PluginTest extends TestCase
             'Mein Kirby Plugin',
             $extensions['translations']['de']['presprog.my-kirby-plugin.example']
         );
+    }
+
+    public function testHelperFunctionReturnsPluginInstance(): void
+    {
+        $pluginInstance = myPlugin();
+
+        self::assertInstanceOf(MyPlugin::class, $pluginInstance);
+        self::assertTrue($pluginInstance->options->enabled);
+    }
+
+    public function testHelperFunctionWithCustomKirbyInstance(): void
+    {
+        $kirby = $this->createMock(App::class);
+        $kirby->method('option')
+            ->with('presprog.my-kirby-plugin.enabled', true)
+            ->willReturn(false);
+
+        $pluginInstance = myPlugin($kirby);
+
+        self::assertInstanceOf(MyPlugin::class, $pluginInstance);
+        self::assertFalse($pluginInstance->options->enabled);
     }
 }

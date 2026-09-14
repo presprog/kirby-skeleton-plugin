@@ -1,11 +1,13 @@
 <?php declare(strict_types=1);
 
+use Kirby\Cms\App;
+use PresProg\MyPlugin\MyPlugin;
 use PresProg\MyPlugin\Options;
 
 if (!function_exists('myPlugin')) {
-    function myPlugin(array $config): \PresProg\MyPlugin\MyPlugin
+    function myPlugin(?App $kirby = null): MyPlugin
     {
-        return new PresProg\MyPlugin\MyPlugin(Options::fromConfig($config));
+        return new MyPlugin(Options::fromConfig($kirby));
     }
 }
 

@@ -122,11 +122,11 @@ final class PluginInitializerTest extends TestCase
         self::assertStringContainsString('class DoSomething', $this->read('classes/DoSomething.php'));
         self::assertStringContainsString('namespace YourVendor\\DoSomething;', $this->read('classes/Options.php'));
         self::assertStringContainsString(
-            'function doSomething(array $config): \\YourVendor\\DoSomething\\DoSomething',
+            'function doSomething(?App $kirby = null): DoSomething',
             $this->read('helpers.php')
         );
         self::assertStringContainsString(
-            'return new YourVendor\\DoSomething\\DoSomething(Options::fromConfig($config));',
+            'return new DoSomething(Options::fromConfig($kirby));',
             $this->read('helpers.php')
         );
 
@@ -192,7 +192,7 @@ final class PluginInitializerTest extends TestCase
             $pluginTest
         );
         self::assertStringContainsString(
-            'new DoSomething(Options::fromConfig($extensions[\'options\']))',
+            'new DoSomething(Options::fromConfig())',
             $pluginTest
         );
 

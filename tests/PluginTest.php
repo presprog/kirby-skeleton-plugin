@@ -47,6 +47,9 @@ final class PluginTest extends TestCase
         self::assertSame(['enabled' => true], $extensions['options']);
         $pluginInstance = new MyPlugin(Options::fromConfig());
         self::assertTrue($pluginInstance->options->enabled);
+        self::assertSame([], $extensions['api']);
+        self::assertSame([], $extensions['blueprints']);
+        self::assertSame([], $extensions['routes']);
         self::assertSame([], $extensions['fileMethods']);
         self::assertSame([], $extensions['pageMethods']);
         self::assertSame([], $extensions['siteMethods']);

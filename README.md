@@ -8,7 +8,7 @@ This repository is our **opinionated** starting point for Kirby 5 plugins to sav
 
 ## What it provides
 
-- Kirby plugin registration with starter extensions for commands, config options, fields, hooks, methods, snippets and translations
+- Kirby plugin registration with starter extensions for API, blueprints, commands, config options, fields, hooks, methods, routes, snippets and translations
 - Composer setup with isolated quality tools via `bamarni/composer-bin-plugin`
 - PHPUnit, Psalm, PHP CS Fixer and Composer validation scripts
 - Panel and frontend asset tooling with Yarn, Kirbyup, Vite and Vitest

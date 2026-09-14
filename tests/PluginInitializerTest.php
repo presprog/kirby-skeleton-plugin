@@ -43,11 +43,14 @@ final class PluginInitializerTest extends TestCase
             'classes/InitCommand.php',
             'classes/MyPlugin.php',
             'classes/Options.php',
+            'extensions/api.php',
+            'extensions/blueprints.php',
             'extensions/commands.php',
             'extensions/fields.php',
             'extensions/hooks.php',
             'extensions/methods.php',
             'extensions/options.php',
+            'extensions/routes.php',
             'extensions/snippets.php',
             'helpers.php',
             'index.js',
@@ -158,6 +161,9 @@ final class PluginInitializerTest extends TestCase
             "'do-something-example'",
             $this->read('extensions/fields.php')
         );
+        self::assertFileExists($this->project . '/extensions/api.php');
+        self::assertFileExists($this->project . '/extensions/blueprints.php');
+        self::assertFileExists($this->project . '/extensions/routes.php');
         self::assertStringContainsString(
             'panel.plugin).toHaveBeenCalledWith("your-vendor/do-something"',
             $this->read('resources/panel/index.test.js')

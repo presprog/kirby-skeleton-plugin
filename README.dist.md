@@ -8,7 +8,7 @@ Describe what this Kirby plugin does and when someone should install it.
 
 ## Features
 
-- Register Kirby extension examples for options, fields, hooks, methods, snippets and translations.
+- Register Kirby extension examples for API, blueprints, commands, options, fields, hooks, methods, routes, snippets and translations.
 - Provide Panel and frontend asset entry points.
 - Include tests and code quality tooling for ongoing plugin development.
 

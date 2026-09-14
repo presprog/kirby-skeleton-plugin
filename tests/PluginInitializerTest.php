@@ -100,7 +100,7 @@ final class PluginInitializerTest extends TestCase
 
     public function testInitializesCopiedSkeleton(): void
     {
-        [$exitCode, $output, $error] = $this->runInitializer('your-vendor/kirby-your-plugin');
+        [$exitCode, $output, $error] = $this->runInitializer('your-vendor/kirby-do-something-plugin');
 
         self::assertSame(0, $exitCode, $output . PHP_EOL . $error);
 
@@ -111,83 +111,99 @@ final class PluginInitializerTest extends TestCase
             JSON_THROW_ON_ERROR
         );
 
-        self::assertSame('your-vendor/kirby-your-plugin', $composer['name']);
-        self::assertSame('classes/', $composer['autoload']['psr-4']['YourVendor\\YourPlugin\\']);
+        self::assertSame('your-vendor/kirby-do-something-plugin', $composer['name']);
+        self::assertSame('classes/', $composer['autoload']['psr-4']['YourVendor\\DoSomething\\']);
         self::assertArrayNotHasKey('PresProg\\MyPlugin\\', $composer['autoload']['psr-4']);
-        self::assertSame('tests/', $composer['autoload-dev']['psr-4']['YourVendor\\YourPlugin\\Tests\\']);
+        self::assertSame('tests/', $composer['autoload-dev']['psr-4']['YourVendor\\DoSomething\\Tests\\']);
         self::assertArrayNotHasKey('PresProg\\MyPlugin\\Tests\\', $composer['autoload-dev']['psr-4']);
-        self::assertSame('your-plugin', $composer['extra']['installer-name']);
+        self::assertSame('do-something', $composer['extra']['installer-name']);
         self::assertArrayNotHasKey('plugin:init', $composer['scripts']);
-        self::assertFileExists($this->project . '/classes/YourPlugin.php');
+        self::assertFileExists($this->project . '/classes/DoSomething.php');
         self::assertFileDoesNotExist($this->project . '/classes/MyPlugin.php');
-        self::assertStringContainsString('class YourPlugin', $this->read('classes/YourPlugin.php'));
-        self::assertStringContainsString('namespace YourVendor\\YourPlugin;', $this->read('classes/Options.php'));
+        self::assertStringContainsString('class DoSomething', $this->read('classes/DoSomething.php'));
+        self::assertStringContainsString('namespace YourVendor\\DoSomething;', $this->read('classes/Options.php'));
+        self::assertStringContainsString(
+            'function doSomething(array $config): \\YourVendor\\DoSomething\\DoSomething',
+            $this->read('helpers.php')
+        );
+        self::assertStringContainsString(
+            'return new YourVendor\\DoSomething\\DoSomething(Options::fromConfig($config));',
+            $this->read('helpers.php')
+        );
 
         self::assertStringContainsString(
-            "App::plugin('your-vendor/your-plugin'",
+            "App::plugin('your-vendor/do-something'",
             $this->read('index.php')
         );
         self::assertStringContainsString(
-            "'your-plugin:about'",
+            "'do-something:about'",
             $this->read('extensions/commands.php')
         );
         self::assertStringContainsString(
-            "'your-vendor/your-plugin/example'",
+            "'your-vendor/do-something/example'",
             $this->read('extensions/snippets.php')
         );
         self::assertStringContainsString(
-            'your-vendor.your-plugin.example',
+            'your-vendor.do-something.example',
             $this->read('translations/en.yml')
         );
         self::assertStringContainsString(
-            'panel.plugin("your-vendor/your-plugin"',
+            'panel.plugin("your-vendor/do-something"',
             $this->read('resources/panel/index.js')
         );
         self::assertStringContainsString(
-            '"your-plugin-example"',
+            '"do-something-example"',
             $this->read('resources/panel/index.js')
         );
         self::assertStringContainsString(
-            "'your-plugin-example'",
+            "'do-something-example'",
             $this->read('extensions/fields.php')
         );
         self::assertStringContainsString(
-            'panel.plugin).toHaveBeenCalledWith("your-vendor/your-plugin"',
+            'panel.plugin).toHaveBeenCalledWith("your-vendor/do-something"',
             $this->read('resources/panel/index.test.js')
         );
         self::assertStringContainsString(
-            'panel.plugin("your-vendor/your-plugin"',
+            'panel.plugin("your-vendor/do-something"',
             $this->read('index.js')
         );
         self::assertStringContainsString(
-            '"your-plugin-example"',
+            '"do-something-example"',
             $this->read('index.js')
         );
         self::assertStringContainsString(
-            'your-vendor/your-plugin',
+            'your-vendor/do-something',
             $this->read('resources/frontend/index.js')
         );
         self::assertStringContainsString(
-            'your-vendor/your-plugin',
+            'your-vendor/do-something',
             $this->read('assets/dist/frontend.js')
         );
         $pluginTest = $this->read('tests/PluginTest.php');
         self::assertStringContainsString(
-            'namespace YourVendor\\YourPlugin\\Tests;',
+            'namespace YourVendor\\DoSomething\\Tests;',
             $pluginTest
         );
         self::assertStringContainsString(
-            "App::plugin('your-vendor/your-plugin')",
+            "App::plugin('your-vendor/do-something')",
+            $pluginTest
+        );
+        self::assertStringContainsString(
+            'use YourVendor\\DoSomething\\DoSomething;',
+            $pluginTest
+        );
+        self::assertStringContainsString(
+            'new DoSomething(Options::fromConfig($extensions[\'options\']))',
             $pluginTest
         );
 
         $readme = $this->read('README.md');
-        self::assertStringContainsString('# Your Plugin', $readme);
-        self::assertStringContainsString('composer require your-vendor/kirby-your-plugin', $readme);
-        self::assertStringContainsString('your-vendor.your-plugin.enabled', $readme);
-        self::assertStringContainsString('type: your-plugin-example', $readme);
-        self::assertStringContainsString('kirby your-plugin:about', $readme);
-        self::assertStringContainsString('utm_content=your-plugin', $readme);
+        self::assertStringContainsString('# Do Something', $readme);
+        self::assertStringContainsString('composer require your-vendor/kirby-do-something-plugin', $readme);
+        self::assertStringContainsString('your-vendor.do-something.enabled', $readme);
+        self::assertStringContainsString('type: do-something-example', $readme);
+        self::assertStringContainsString('kirby do-something:about', $readme);
+        self::assertStringContainsString('utm_content=do-something', $readme);
         self::assertStringNotContainsString('utm_content=my-kirby-plugin', $readme);
 
         self::assertFileExists($this->project . '/vendor/autoload.php');
@@ -201,19 +217,55 @@ final class PluginInitializerTest extends TestCase
         $composerBefore = $this->read('composer.json');
 
         [$exitCode, $output, $error] = $this->runInitializer(
-            'your-vendor/kirby-your-plugin',
+            'your-vendor/kirby-do-something-plugin',
             '--dry-run'
         );
 
         self::assertSame(0, $exitCode, $output . PHP_EOL . $error);
         self::assertStringContainsString('Plugin initialization preview:', $output);
-        self::assertStringContainsString('Kirby plugin:     your-vendor/your-plugin', $output);
-        self::assertStringContainsString('PHP class:        YourVendor\\YourPlugin\\YourPlugin', $output);
+        self::assertStringContainsString('Kirby plugin:     your-vendor/do-something', $output);
+        self::assertStringContainsString('PHP class:        YourVendor\\DoSomething\\DoSomething', $output);
         self::assertStringContainsString('No files changed.', $output);
         self::assertSame($composerBefore, $this->read('composer.json'));
         self::assertFileExists($this->project . '/README.dist.md');
         self::assertFileExists($this->project . '/scripts/init.php');
         self::assertFileExists($this->project . '/classes/MyPlugin.php');
+    }
+
+    public function testStripsPrefixAndSuffixCombinationsInPreview(): void
+    {
+        [$exitCode, $output] = $this->runInitializer(
+            'your-vendor/kirby-do-something-plugin',
+            '--dry-run'
+        );
+        self::assertSame(0, $exitCode);
+        self::assertStringContainsString('Kirby plugin:     your-vendor/do-something', $output);
+
+        [$exitCode, $output] = $this->runInitializer(
+            'your-vendor/kirby-do-something',
+            '--dry-run'
+        );
+        self::assertSame(0, $exitCode);
+        self::assertStringContainsString('Kirby plugin:     your-vendor/do-something', $output);
+
+        [$exitCode, $output] = $this->runInitializer(
+            'your-vendor/do-something-plugin',
+            '--dry-run'
+        );
+        self::assertSame(0, $exitCode);
+        self::assertStringContainsString('Kirby plugin:     your-vendor/do-something', $output);
+    }
+
+    public function testInitializesWithCustomNamespace(): void
+    {
+        [$exitCode, $output, $error] = $this->runInitializer(
+            'your-vendor/kirby-do-something-plugin',
+            '--namespace=YourVendor\\DoSomething',
+            '--dry-run'
+        );
+
+        self::assertSame(0, $exitCode, $output . PHP_EOL . $error);
+        self::assertStringContainsString('PHP namespace:    YourVendor\\DoSomething', $output);
     }
 
     private function read(string $path): string

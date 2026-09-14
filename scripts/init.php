@@ -130,9 +130,10 @@ final class PluginInitializer
     {
         [$vendor, $packageName] = explode('/', $package, 2);
         $slug                   = str_starts_with($packageName, 'kirby-') ? substr($packageName, 6) : $packageName;
+        $slug                   = str_ends_with($slug, '-plugin') ? substr($slug, 0, -7) : $slug;
 
         if ($slug === '') {
-            throw new InvalidArgumentException('The package name must contain a name after the kirby- prefix.');
+            throw new InvalidArgumentException('The package name must contain a name between the kirby- prefix and -plugin suffix.');
         }
 
         $title = implode(' ', array_map(
@@ -193,18 +194,14 @@ final class PluginInitializer
         ];
 
         foreach ($this->sourceFiles() as $path) {
-            $contents = $this->read($path);
-            $contents = str_replace(self::DEFAULT_NAMESPACE, $identity['namespace'], $contents);
-            $contents = str_replace(self::DEFAULT_PLUGIN, $identity['plugin'], $contents);
-            $contents = str_replace(self::DEFAULT_PREFIX, str_replace('/', '.', $identity['plugin']), $contents);
-            $contents = str_replace(self::DEFAULT_SLUG . '-example', $identity['slug'] . '-example', $contents);
-            $contents = str_replace(self::DEFAULT_SLUG . ':', $identity['slug'] . ':', $contents);
-            $contents = preg_replace(
-                '/\bclass\s+' . preg_quote(self::DEFAULT_CLASS, '/') . '\b/',
-                'class ' . $identity['class'],
-                $contents,
-                1
-            ) ?? $contents;
+            $contents     = $this->read($path);
+            $contents     = str_replace(self::DEFAULT_NAMESPACE, $identity['namespace'], $contents);
+            $contents     = str_replace(self::DEFAULT_PLUGIN, $identity['plugin'], $contents);
+            $contents     = str_replace(self::DEFAULT_PREFIX, str_replace('/', '.', $identity['plugin']), $contents);
+            $contents     = str_replace(self::DEFAULT_SLUG . '-example', $identity['slug'] . '-example', $contents);
+            $contents     = str_replace(self::DEFAULT_SLUG . ':', $identity['slug'] . ':', $contents);
+            $contents     = str_replace(lcfirst(self::DEFAULT_CLASS), lcfirst($identity['class']), $contents);
+            $contents     = str_replace(self::DEFAULT_CLASS, $identity['class'], $contents);
             $files[$path] = $contents;
         }
 
@@ -404,16 +401,16 @@ final class PluginInitializer
             $stream,
             <<<'TXT'
 Usage:
-  composer plugin:init vendor/kirby-plugin-name [options]
+  composer plugin:init your-vendor/kirby-do-something-plugin [options]
 
 Options:
-  --namespace=Vendor\PluginName  Override the inferred PHP namespace.
-  --dry-run                      Show derived values without changing files.
-  -h, --help                     Show this help.
+  --namespace=YourVendor\PluginName  Override the inferred PHP namespace.
+  --dry-run                          Show derived values without changing files.
+  -h, --help                         Show this help.
 
 Examples:
-  composer plugin:init your-vendor/kirby-your-plugin
-  composer plugin:init your-vendor/kirby-your-plugin --namespace=YourVendor\YourPlugin
+  composer plugin:init your-vendor/kirby-do-something-plugin
+  composer plugin:init your-vendor/kirby-do-something-plugin --namespace=YourVendor\DoSomething
 
 TXT
         );

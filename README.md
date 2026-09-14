@@ -22,12 +22,12 @@ Create a project from this repository and initialize it with its Composer packag
 ```bash
 composer create-project presprog/kirby-skeleton-plugin my-new-kirby-plugin
 cd my-new-kirby-plugin
-composer plugin:init your-vendor/kirby-your-plugin
+composer plugin:init your-vendor/kirby-do-something-plugin
 ```
 
-The initializer removes the conventional `kirby-` package prefix from the Kirby plugin ID and derives the remaining values. For example, `your-vendor/kirby-your-plugin` becomes plugin ID `your-vendor/your-plugin` and namespace `YourVendor\YourPlugin`.
+The initializer removes the conventional `kirby-` package prefix and `-plugin` suffix from the Kirby plugin ID and derives the remaining values. For example, `your-vendor/kirby-do-something-plugin` becomes plugin ID `your-vendor/do-something` and namespace `YourVendor\DoSomething`.
 
-Use `--namespace=YourVendor\\YourPlugin` to override the inferred namespace. Use `--dry-run` to preview the derived values without changing files.
+Use `--namespace=YourVendor\\DoSomething` to override the inferred namespace. Use `--dry-run` to preview the derived values without changing files.
 
 > **To initialize the plugin manually instead:**
 >

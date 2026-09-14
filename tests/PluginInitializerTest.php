@@ -187,6 +187,8 @@ final class PluginInitializerTest extends TestCase
         self::assertStringContainsString('your-vendor.your-plugin.enabled', $readme);
         self::assertStringContainsString('type: your-plugin-example', $readme);
         self::assertStringContainsString('kirby your-plugin:about', $readme);
+        self::assertStringContainsString('utm_content=your-plugin', $readme);
+        self::assertStringNotContainsString('utm_content=my-kirby-plugin', $readme);
 
         self::assertFileExists($this->project . '/vendor/autoload.php');
         self::assertFileDoesNotExist($this->project . '/README.dist.md');

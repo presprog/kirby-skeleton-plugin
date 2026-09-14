@@ -226,6 +226,7 @@ final class PluginInitializer
         );
         $readme = str_replace('composer require ' . self::DEFAULT_PACKAGE, 'composer require ' . $identity['package'], $readme);
         $readme = str_replace('site/plugins/my-kirby-plugin', 'site/plugins/' . $identity['slug'], $readme);
+        $readme = str_replace('utm_content=my-kirby-plugin', 'utm_content=' . $identity['slug'], $readme);
         $readme = str_replace(self::DEFAULT_PLUGIN, $identity['plugin'], $readme);
         $readme = str_replace(self::DEFAULT_PREFIX, str_replace('/', '.', $identity['plugin']), $readme);
         $readme = str_replace(self::DEFAULT_SLUG . '-example', $identity['slug'] . '-example', $readme);

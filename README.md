@@ -2,7 +2,7 @@
 
 # Kirby Skeleton Plugin
 
-This repository is our opinionated starting point for Kirby 5 plugins to save us the time and effort of setting up a new plugin.
+This repository is our **opinionated** starting point for Kirby 5 plugins to save us the time and effort of setting up a new plugin. [Use it to create your own plugin](https://github.com/presprog/kirby-skeleton-plugin/generate) or as inspiration for your own boilerplate.
 
 > Requires Kirby 5 and PHP 8.4 or later.
 
@@ -29,20 +29,20 @@ The initializer removes the conventional `kirby-` package prefix from the Kirby 
 
 Use `--namespace=YourVendor\\YourPlugin` to override the inferred namespace. Use `--dry-run` to preview the derived values without changing files.
 
-To initialize the plugin manually instead:
-
-1. Update `composer.json`:
-   - Set the package name and description.
-   - Replace the PSR-4 namespace.
-   - Set the `installer-name`.
-   - Remove the `plugin:init` script.
-2. Rename `classes/MyPlugin.php` and the `MyPlugin` class.
-3. Replace the plugin ID in `index.php`, `resources/panel/index.js` and `resources/frontend/index.js`.
-4. Replace derived names such as `my-plugin-example`, `my-plugin:about` and `presprog.my-kirby-plugin.*`.
-5. Use `README.dist.md` as the basis for the plugin README and then delete `README.dist.md`.
-6. Install the frontend dependencies with `yarn install --immutable`, run `yarn build` and commit the generated assets.
-7. Update the namespace and plugin ID assertions in `tests/PluginTest.php`.
-8. Delete `scripts/init.php`, `tests/PluginInitializerTest.php` and this initialization-specific documentation.
+> **To initialize the plugin manually instead:**
+>
+> 1. Update `composer.json`:
+>    - Set the package name and description.
+>    - Replace the PSR-4 namespace.
+>    - Set the `installer-name`.
+>    - Remove the `plugin:init` script.
+> 2. Rename `classes/MyPlugin.php` and the `MyPlugin` class.
+> 3. Replace the plugin ID in `index.php`, `resources/panel/index.js` and `resources/frontend/index.js`.
+> 4. Replace derived names such as `my-plugin-example`, `my-plugin:about` and `presprog.my-kirby-plugin.*`.
+> 5. Use `README.dist.md` as the basis for the plugin README and then delete `README.dist.md`.
+> 6. Install the frontend dependencies with `yarn install --immutable`, run `yarn build` and commit the generated assets.
+> 7. Update the namespace and plugin ID assertions in `tests/PluginTest.php`.
+> 8. Delete `scripts/init.php`, `tests/PluginInitializerTest.php` and this initialization-specific documentation.
 
 ## Development
 
@@ -81,6 +81,6 @@ MIT License Copyright © 2026 Present Progressive
 
 <img src=".github/logo.svg?raw=true" width="200" height="43">
 
-Made by [Present Progressive](https://www.presentprogressive.de) for the Kirby community.
+Made by [Present Progressive](https://www.presentprogressive.de?utm_source=github&utm_medium=referral&utm_campaign=backlink&utm_content=kirby-skeleton-plugin) for the Kirby community.
 
 *This skeleton was created with AI assistance.*

@@ -92,4 +92,4 @@ MIT License Copyright © 2026 Present Progressive
 
 <img src=".github/logo.svg?raw=true" width="200" height="43">
 
-Made by [Present Progressive](https://www.presentprogressive.de) for the Kirby community.
+Made by [Present Progressive](https://www.presentprogressive.de?utm_source=github&utm_medium=referral&utm_campaign=backlink&utm_content=my-kirby-plugin) for the Kirby community.

@@ -17,7 +17,6 @@ resources/vitest.setup.js export-ignore
 
 # Scripts
 scripts/** export-ignore
-scripts/init.php -export-ignore
 
 # Panel build sources
 .yarnrc.yml export-ignore

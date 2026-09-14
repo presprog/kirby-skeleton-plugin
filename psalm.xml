@@ -11,5 +11,8 @@
     <file name="index.php" />
     <directory name="classes" />
     <directory name="extensions" />
+    <ignoreFiles>
+      <directory name="vendor" />
+    </ignoreFiles>
   </projectFiles>
 </psalm>

@@ -4,9 +4,11 @@ namespace PresProg\MyPlugin\Tests;
 
 use FilesystemIterator;
 use PHPUnit\Framework\TestCase;
+use PresProg\MyPlugin\InitCommand;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use RuntimeException;
+use Symfony\Component\Console\Tester\CommandTester;
 
 final class PluginInitializerTest extends TestCase
 {
@@ -39,6 +41,7 @@ final class PluginInitializerTest extends TestCase
 
         foreach ([
             'composer.json',
+            'classes/InitCommand.php',
             'classes/MyPlugin.php',
             'classes/Options.php',
             'extensions/commands.php',
@@ -67,8 +70,7 @@ final class PluginInitializerTest extends TestCase
             'snippets/example.php',
             'tests/PluginTest.php',
             'translations/de.yml',
-            'translations/en.yml',
-            'scripts/init.php'
+            'translations/en.yml'
         ] as $path) {
             if (!copy(dirname(__DIR__) . '/' . $path, $this->project . '/' . $path)) {
                 throw new RuntimeException('Could not copy fixture file: ' . $path);
@@ -208,7 +210,7 @@ final class PluginInitializerTest extends TestCase
 
         self::assertFileExists($this->project . '/vendor/autoload.php');
         self::assertFileDoesNotExist($this->project . '/README.dist.md');
-        self::assertFileDoesNotExist($this->project . '/scripts/init.php');
+        self::assertFileDoesNotExist($this->project . '/classes/InitCommand.php');
         self::assertFileDoesNotExist($this->project . '/tests/PluginInitializerTest.php');
     }
 
@@ -228,7 +230,7 @@ final class PluginInitializerTest extends TestCase
         self::assertStringContainsString('No files changed.', $output);
         self::assertSame($composerBefore, $this->read('composer.json'));
         self::assertFileExists($this->project . '/README.dist.md');
-        self::assertFileExists($this->project . '/scripts/init.php');
+        self::assertFileExists($this->project . '/classes/InitCommand.php');
         self::assertFileExists($this->project . '/classes/MyPlugin.php');
     }
 
@@ -366,7 +368,7 @@ final class PluginInitializerTest extends TestCase
         );
 
         self::assertSame(0, $exitCode, $output . PHP_EOL . $error);
-        self::assertStringContainsString('The package name must use lowercase kebab-case in the form vendor/package.', $output);
+        self::assertStringContainsString('The package name must use lowercase kebab-case', $output);
         self::assertStringContainsString('Composer package: custom-vendor/kirby-valid-plugin', $output);
     }
 
@@ -394,32 +396,31 @@ final class PluginInitializerTest extends TestCase
      */
     private function runInitializerWithInput(string $input, string ...$arguments): array
     {
-        $process = proc_open(
-            [PHP_BINARY, $this->project . '/scripts/init.php', ...$arguments],
-            [
-                0 => ['pipe', 'r'],
-                1 => ['pipe', 'w'],
-                2 => ['pipe', 'w']
-            ],
-            $pipes,
-            $this->project
-        );
-
-        if (!is_resource($process)) {
-            throw new RuntimeException('Could not start the initializer.');
-        }
+        $command = new InitCommand($this->project);
+        $tester  = new CommandTester($command);
 
         if ($input !== '') {
-            fwrite($pipes[0], $input);
+            $tester->setInputs(explode(PHP_EOL, rtrim($input, "\r\n")));
         }
-        fclose($pipes[0]);
 
-        $output = stream_get_contents($pipes[1]);
-        fclose($pipes[1]);
-        $error = stream_get_contents($pipes[2]);
-        fclose($pipes[2]);
-        $exitCode = proc_close($process);
+        $params        = [];
+        $isInteractive = true;
 
-        return [$exitCode, $output, $error];
+        foreach ($arguments as $argument) {
+            if ($argument === '--dry-run') {
+                $params['--dry-run'] = true;
+            } elseif ($argument === '--no-interaction' || $argument === '-n') {
+                $isInteractive = false;
+            } elseif (str_starts_with($argument, '--namespace=')) {
+                $params['--namespace'] = substr($argument, strlen('--namespace='));
+            } elseif (!str_starts_with($argument, '-')) {
+                $params['package'] = $argument;
+            }
+        }
+
+        $exitCode = $tester->execute($params, ['interactive' => $isInteractive]);
+        $output   = $tester->getDisplay();
+
+        return [$exitCode, $output, ''];
     }
 }

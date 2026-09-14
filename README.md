@@ -42,7 +42,7 @@ Use `-n` or `--no-interaction` to run without interactive prompts, `--namespace=
 > 5. Use `README.dist.md` as the basis for the plugin README and then delete `README.dist.md`.
 > 6. Install the frontend dependencies with `yarn install --immutable`, run `yarn build` and commit the generated assets.
 > 7. Update the namespace and plugin ID assertions in `tests/PluginTest.php`.
-> 8. Delete `scripts/init.php`, `tests/PluginInitializerTest.php` and this initialization-specific documentation.
+> 8. Delete `classes/InitCommand.php`, `tests/PluginInitializerTest.php` and this initialization-specific documentation.
 
 ## Development
 

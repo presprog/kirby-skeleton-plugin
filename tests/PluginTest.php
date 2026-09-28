@@ -26,38 +26,21 @@ final class PluginTest extends TestCase
 
         $extensions = $plugin->extends();
 
-        self::assertIsCallable($extensions['commands']['my-plugin:about']['command']);
-        self::assertSame(
-            'Prints information about the plugin.',
-            $extensions['commands']['my-plugin:about']['description']
-        );
-        $cli = new class () {
-            public string|null $output = null;
-
-            public function out(string $message): void
-            {
-                $this->output = $message;
-            }
-        };
-        $extensions['commands']['my-plugin:about']['command']($cli);
-        self::assertSame('I am the Kirby skeleton plugin by Present Progressive', $cli->output);
-        self::assertSame('text', $extensions['fields']['my-plugin-example']['extends']);
-        self::assertArrayHasKey('page.update:after', $extensions['hooks']);
-        self::assertIsCallable($extensions['hooks']['page.update:after']);
         self::assertSame(['enabled' => true], $extensions['options']);
         $pluginInstance = new MyPlugin(Options::fromConfig());
         self::assertTrue($pluginInstance->options->enabled);
-        self::assertSame([], $extensions['api']);
-        self::assertSame([], $extensions['blueprints']);
-        self::assertSame([], $extensions['routes']);
-        self::assertSame([], $extensions['fileMethods']);
-        self::assertSame([], $extensions['pageMethods']);
-        self::assertSame([], $extensions['siteMethods']);
+        self::assertArrayNotHasKey('api', $extensions);
+        self::assertArrayNotHasKey('blueprints', $extensions);
+        self::assertArrayNotHasKey('commands', $extensions);
+        self::assertArrayNotHasKey('fields', $extensions);
+        self::assertArrayNotHasKey('hooks', $extensions);
+        self::assertArrayNotHasKey('methods', $extensions);
+        self::assertArrayNotHasKey('routes', $extensions);
+        self::assertArrayNotHasKey('snippets', $extensions);
+        self::assertArrayNotHasKey('fileMethods', $extensions);
+        self::assertArrayNotHasKey('pageMethods', $extensions);
+        self::assertArrayNotHasKey('siteMethods', $extensions);
         self::assertArrayNotHasKey('pagesMethods', $extensions);
-        self::assertSame(
-            dirname(__DIR__) . '/extensions/../snippets/example.php',
-            $extensions['snippets']['presprog/my-kirby-plugin/example']
-        );
         self::assertSame(
             'My Kirby plugin',
             $extensions['translations']['en']['presprog.my-kirby-plugin.example']

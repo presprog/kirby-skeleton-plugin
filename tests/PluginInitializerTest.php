@@ -29,7 +29,6 @@ final class PluginInitializerTest extends TestCase
             'resources/panel',
             'resources/panel/fields',
             'scripts',
-            'snippets',
             'tests',
             'translations',
             'tools'
@@ -44,15 +43,8 @@ final class PluginInitializerTest extends TestCase
             'classes/InitCommand.php',
             'classes/MyPlugin.php',
             'classes/Options.php',
-            'extensions/api.php',
-            'extensions/blueprints.php',
-            'extensions/commands.php',
-            'extensions/fields.php',
-            'extensions/hooks.php',
-            'extensions/methods.php',
             'extensions/options.php',
-            'extensions/routes.php',
-            'extensions/snippets.php',
+            'extensions/translations.php',
             'helpers.php',
             'index.js',
             'index.php',
@@ -67,7 +59,6 @@ final class PluginInitializerTest extends TestCase
             'resources/panel/fields/example.js',
             'resources/panel/index.js',
             'resources/panel/index.test.js',
-            'snippets/example.php',
             'tests/PluginTest.php',
             'translations/de.yml',
             'translations/en.yml'
@@ -139,14 +130,6 @@ final class PluginInitializerTest extends TestCase
             $this->read('index.php')
         );
         self::assertStringContainsString(
-            "'do-something:about'",
-            $this->read('extensions/commands.php')
-        );
-        self::assertStringContainsString(
-            "'your-vendor/do-something/example'",
-            $this->read('extensions/snippets.php')
-        );
-        self::assertStringContainsString(
             'your-vendor.do-something.example',
             $this->read('translations/en.yml')
         );
@@ -158,13 +141,8 @@ final class PluginInitializerTest extends TestCase
             '"do-something-example"',
             $this->read('resources/panel/index.js')
         );
-        self::assertStringContainsString(
-            "'do-something-example'",
-            $this->read('extensions/fields.php')
-        );
-        self::assertFileExists($this->project . '/extensions/api.php');
-        self::assertFileExists($this->project . '/extensions/blueprints.php');
-        self::assertFileExists($this->project . '/extensions/routes.php');
+        self::assertFileExists($this->project . '/extensions/options.php');
+        self::assertFileExists($this->project . '/extensions/translations.php');
         self::assertStringContainsString(
             'panel.plugin).toHaveBeenCalledWith("your-vendor/do-something"',
             $this->read('resources/panel/index.test.js')
@@ -208,7 +186,6 @@ final class PluginInitializerTest extends TestCase
         self::assertStringContainsString('composer require your-vendor/kirby-do-something-plugin', $readme);
         self::assertStringContainsString('your-vendor.do-something.enabled', $readme);
         self::assertStringContainsString('type: do-something-example', $readme);
-        self::assertStringContainsString('kirby do-something:about', $readme);
         self::assertStringContainsString('utm_content=do-something', $readme);
         self::assertStringNotContainsString('utm_content=my-kirby-plugin', $readme);
 

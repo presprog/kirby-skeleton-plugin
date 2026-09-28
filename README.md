@@ -8,7 +8,7 @@ This repository is our **opinionated** starting point for Kirby 5 plugins to sav
 
 ## What it provides
 
-- Kirby plugin registration with starter extensions for API, blueprints, commands, config options, fields, hooks, methods, routes, snippets and translations
+- Kirby plugin registration with starter extensions for config options and translations
 - Composer setup with isolated quality tools via `bamarni/composer-bin-plugin`
 - PHPUnit, Psalm, PHP CS Fixer and Composer validation scripts
 - Panel and frontend asset tooling with Yarn, Kirbyup, Vite and Vitest
@@ -38,7 +38,7 @@ Use `-n` or `--no-interaction` to run without interactive prompts, `--namespace=
 >    - Remove the `plugin:init` script.
 > 2. Rename `classes/MyPlugin.php` and the `MyPlugin` class.
 > 3. Replace the plugin ID in `index.php`, `resources/panel/index.js` and `resources/frontend/index.js`.
-> 4. Replace derived names such as `my-plugin-example`, `my-plugin:about` and `presprog.my-kirby-plugin.*`.
+> 4. Replace derived names such as `my-plugin-example` and `presprog.my-kirby-plugin.*`.
 > 5. Use `README.dist.md` as the basis for the plugin README and then delete `README.dist.md`.
 > 6. Install the frontend dependencies with `yarn install --immutable`, run `yarn build` and commit the generated assets.
 > 7. Update the namespace and plugin ID assertions in `tests/PluginTest.php`.

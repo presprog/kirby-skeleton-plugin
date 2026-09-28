@@ -20,14 +20,10 @@ final class PluginInitializerTest extends TestCase
         $this->project = sys_get_temp_dir() . '/kirby-plugin-init-' . bin2hex(random_bytes(8));
 
         foreach ([
-            'assets',
-            'assets/dist',
             'classes',
             'extensions',
-            'resources',
-            'resources/frontend',
-            'resources/panel',
-            'resources/panel/fields',
+            'panel',
+            'panel/fields',
             'scripts',
             'tests',
             'translations',
@@ -50,15 +46,10 @@ final class PluginInitializerTest extends TestCase
             'index.php',
             'README.md',
             'README.dist.md',
-            'assets/dist/frontend.css',
-            'assets/dist/frontend.js',
-            'resources/frontend/index.css',
-            'resources/frontend/index.js',
-            'resources/frontend/index.test.js',
-            'resources/panel/index.css',
-            'resources/panel/fields/example.js',
-            'resources/panel/index.js',
-            'resources/panel/index.test.js',
+            'panel/index.css',
+            'panel/fields/example.js',
+            'panel/index.js',
+            'panel/index.test.js',
             'tests/PluginTest.php',
             'translations/de.yml',
             'translations/en.yml'
@@ -135,17 +126,17 @@ final class PluginInitializerTest extends TestCase
         );
         self::assertStringContainsString(
             'panel.plugin("your-vendor/do-something"',
-            $this->read('resources/panel/index.js')
+            $this->read('panel/index.js')
         );
         self::assertStringContainsString(
             '"do-something-example"',
-            $this->read('resources/panel/index.js')
+            $this->read('panel/index.js')
         );
         self::assertFileExists($this->project . '/extensions/options.php');
         self::assertFileExists($this->project . '/extensions/translations.php');
         self::assertStringContainsString(
             'panel.plugin).toHaveBeenCalledWith("your-vendor/do-something"',
-            $this->read('resources/panel/index.test.js')
+            $this->read('panel/index.test.js')
         );
         self::assertStringContainsString(
             'panel.plugin("your-vendor/do-something"',
@@ -154,14 +145,6 @@ final class PluginInitializerTest extends TestCase
         self::assertStringContainsString(
             '"do-something-example"',
             $this->read('index.js')
-        );
-        self::assertStringContainsString(
-            'your-vendor/do-something',
-            $this->read('resources/frontend/index.js')
-        );
-        self::assertStringContainsString(
-            'your-vendor/do-something',
-            $this->read('assets/dist/frontend.js')
         );
         $pluginTest = $this->read('tests/PluginTest.php');
         self::assertStringContainsString(

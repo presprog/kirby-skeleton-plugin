@@ -20,7 +20,7 @@ const run = (command, args, options = {}) => {
 
 const status = spawnSync(
   executable("git"),
-  ["status", "--porcelain", "--", "index.js", "index.css", "assets/dist"],
+  ["status", "--porcelain", "--", "index.js", "index.css"],
   { encoding: "utf8" }
 )
 
@@ -35,7 +35,7 @@ if (status.stdout.trim() === "") {
 
 process.stdout.write(status.stdout)
 
-run("git", ["diff", "--", "index.js", "index.css", "assets/dist"])
+run("git", ["diff", "--", "index.js", "index.css"])
 
 process.stderr.write(
   "Run 'yarn build' and commit the compiled assets.\n"

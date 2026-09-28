@@ -11,7 +11,7 @@ This repository is our **opinionated** starting point for Kirby 5 plugins to sav
 - Kirby plugin registration with starter extensions for config options and translations
 - Composer setup with isolated quality tools via `bamarni/composer-bin-plugin`
 - PHPUnit, Psalm, PHP CS Fixer and Composer validation scripts
-- Panel and frontend asset tooling with Yarn, Kirbyup, Vite and Vitest
+- Panel asset tooling with Yarn, Kirbyup and Vitest
 - Committed generated assets so Composer installations are ready to run
 - `README.dist.md` as the derived-plugin README template
 
@@ -37,10 +37,10 @@ Use `-n` or `--no-interaction` to run without interactive prompts, `--namespace=
 >    - Set the `installer-name`.
 >    - Remove the `plugin:init` script.
 > 2. Rename `classes/MyPlugin.php` and the `MyPlugin` class.
-> 3. Replace the plugin ID in `index.php`, `resources/panel/index.js` and `resources/frontend/index.js`.
+> 3. Replace the plugin ID in `index.php` and `panel/index.js`.
 > 4. Replace derived names such as `my-plugin-example` and `presprog.my-kirby-plugin.*`.
 > 5. Use `README.dist.md` as the basis for the plugin README and then delete `README.dist.md`.
-> 6. Install the frontend dependencies with `yarn install --immutable`, run `yarn build` and commit the generated assets.
+> 6. Install the dependencies with `yarn install --immutable`, run `yarn build` and commit the generated assets.
 > 7. Update the namespace and plugin ID assertions in `tests/PluginTest.php`.
 > 8. Delete `classes/InitCommand.php`, `tests/PluginInitializerTest.php` and this initialization-specific documentation.
 
@@ -58,19 +58,19 @@ Run JavaScript tests:
 yarn test:unit
 ```
 
-Run the asset reproducibility check before committing Panel or frontend asset changes:
+Run the asset reproducibility check before committing Panel asset changes:
 
 ```bash
 yarn asset:check
 ```
 
-Use `yarn dev:panel` while developing the Panel interface and `yarn dev:frontend` while developing public frontend assets. The generated root-level `index.js` and, when styles are present, `index.css` must be committed for Kirby's Panel autoloading. Generated frontend assets in `assets/dist/` must also be committed so Composer installations are ready to run without Node.js or Yarn. CI verifies that these files match the sources in `resources/`.
+Use `yarn dev` while developing the Panel interface. The generated root-level `index.js` and, when styles are present, `index.css` must be committed for Kirby's Panel autoloading so Composer installations are ready to run without Node.js or Yarn. CI verifies that these files match the sources in `panel/`.
 
 ### Test Pipeline & CI
 
 The automated GitHub Actions workflow (`.github/workflows/tests.yml`) validates pull requests and pushes against `main`:
 
-- **Panel & Assets**: Tests JavaScript components with Vitest (`yarn test:unit`) and verifies that committed compiled assets match their source files (`yarn asset:check`).
+- **Panel Assets**: Tests JavaScript components with Vitest (`yarn test:unit`) and verifies that committed compiled assets match their source files (`yarn asset:check`).
 - **PHP Matrix**: Tests PHPUnit test suites and static analysis (`composer analyze`) across PHP 8.4 and 8.5 against both `lowest` and `latest` stable dependencies, plus experimental builds against Kirby pre-releases (Kirby 6 Alpha).
 
 ## License

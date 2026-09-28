@@ -9,7 +9,7 @@ Describe what this Kirby plugin does and when someone should install it.
 ## Features
 
 - Register Kirby extension examples for options and translations.
-- Provide Panel and frontend asset entry points.
+- Provide Panel asset entry points.
 - Include tests and code quality tooling for ongoing plugin development.
 
 ## Installation

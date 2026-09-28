@@ -9,10 +9,9 @@ phpunit.xml export-ignore
 psalm.xml export-ignore
 tools/** export-ignore
 
-# Frontend config
-resources/vite.frontend.config.mjs export-ignore
-resources/vitest.config.mjs export-ignore
-resources/vitest.setup.js export-ignore
+# JS test config
+vitest.config.mjs export-ignore
+vitest.setup.js export-ignore
 
 # Scripts
 scripts/** export-ignore
@@ -20,7 +19,7 @@ scripts/** export-ignore
 # Panel build sources
 .yarnrc.yml export-ignore
 package.json export-ignore
-resources/ export-ignore
+panel/ export-ignore
 yarn.lock export-ignore
 
 # Plugin

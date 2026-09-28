@@ -81,9 +81,11 @@ final class InitCommand extends Command
 
         $originals = $this->writeFiles($files);
         $classMove = null;
+        $deleted   = [];
 
         try {
             $classMove = $this->renameClassFile($identity['class']);
+            $deleted   = $this->removeInitialFiles();
             $this->dumpAutoload();
         } catch (Throwable $exception) {
             if ($classMove !== null && is_file($classMove['to'])) {
@@ -91,6 +93,7 @@ final class InitCommand extends Command
             }
 
             $this->restoreFiles($originals);
+            $this->restoreFiles($deleted);
 
             try {
                 $this->dumpAutoload();
@@ -99,17 +102,6 @@ final class InitCommand extends Command
             }
 
             throw $exception;
-        }
-
-        foreach ([
-            $this->root . '/classes/InitCommand.php',
-            $this->root . '/scripts/init.php',
-            $this->root . '/README.dist.md',
-            $this->root . '/tests/PluginInitializerTest.php'
-        ] as $path) {
-            if (is_file($path) && !unlink($path)) {
-                $output->writeln('<error>Warning: Could not remove ' . basename($path) . '</error>');
-            }
         }
 
         $this->success($output, $identity);
@@ -417,7 +409,7 @@ final class InitCommand extends Command
             foreach ($iterator as $file) {
                 if ($file->isFile()) {
                     $pathname = $file->getPathname();
-                    if ($pathname === $this->root . '/classes/InitCommand.php') {
+                    if ($pathname === $this->root . '/classes/InitCommand.php' || $pathname === $this->root . '/tests/PluginInitializerTest.php') {
                         continue;
                     }
                     $files[] = $pathname;
@@ -426,6 +418,30 @@ final class InitCommand extends Command
         }
 
         return array_values(array_unique($files));
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    private function removeInitialFiles(): array
+    {
+        $deleted = [];
+
+        foreach ([
+            $this->root . '/classes/InitCommand.php',
+            $this->root . '/scripts/init.php',
+            $this->root . '/README.dist.md',
+            $this->root . '/tests/PluginInitializerTest.php'
+        ] as $path) {
+            if (is_file($path)) {
+                $deleted[$path] = $this->read($path);
+                if (!unlink($path)) {
+                    throw new RuntimeException('Could not remove ' . basename($path));
+                }
+            }
+        }
+
+        return $deleted;
     }
 
     /**

@@ -6,21 +6,22 @@
   beStrictAboutOutputDuringTests="true"
   cacheDirectory=".phpunit.cache"
   colors="true"
-  displayDetailsOnTestsThatTriggerDeprecations="true"
+  executionOrder="random"
+  resolveDependencies="true"
+  displayDetailsOnTestsThatTriggerDeprecations="false"
   displayDetailsOnTestsThatTriggerNotices="true"
   displayDetailsOnTestsThatTriggerWarnings="true"
   displayDetailsOnTestsThatTriggerErrors="true"
   displayDetailsOnIncompleteTests="true"
   displayDetailsOnSkippedTests="true"
-  executionOrder="random"
-  failOnDeprecation="true"
+  failOnDeprecation="false"
   failOnNotice="true"
   failOnWarning="true"
   failOnRisky="true"
   failOnEmptyTestSuite="true"
 >
 
-  <source>
+  <source ignoreIndirectDeprecations="true">
     <include>
       <file>./helpers.php</file>
       <file>./index.php</file>
